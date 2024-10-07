@@ -5,18 +5,28 @@ export class UsersService {
     private users=[
         {
         "id":1,
-        "name":"ido",
-        "email":"ido98@gmail.com"
+        "userName":"idoHashamen",
+        "firstName":"ido",
+        "lastName":"Rose",
+        "email":"ido98@gmail.com",
+        "password":"123456"
+
         },
         {
         "id":2,
-        "name":"tomer",
-        "email":"tomervak98@gmail.com"
+        "userName":"tomervak",
+        "firstName":"tomer",
+        "lastName":"vaknin",
+        "email":"tomervak98@gmail.com",
+        "password":"123456"
         },
         {
         "id":3,
-        "name":"donfil",
-        "email":"bonfil98@gmail.com"
+        "userName":"donfil",
+        "firstName":"don",
+        "lastName":"fil",
+        "email":"bonfil98@gmail.com",
+        "password":"123456"
         }
     ]
 
@@ -29,8 +39,8 @@ export class UsersService {
         return user;
     }
 
-    creat(user : {name:string,email:string}){
-        const userByHighestId = [...this.users].sort((a,b)=>b.id=a.id);
+    creat(user : {name:string,userName:string,firstName:string,lastName:string,email:string,password:string}){
+        const userByHighestId = [...this.users].sort((a,b)=>b.id-a.id);
         const newUser={
             id:userByHighestId[0].id+1,
             ...user
@@ -39,7 +49,7 @@ export class UsersService {
         return newUser;
     }
 
-    update(id:number, updatedUser: {name?:string,email?:string}){
+    update(id:number, updatedUser: {name?:string,userName?:string,firstName?:string,lastName?:string,email?:string,password?:string}){
         this.users = this.users.map(user =>{
             if(user.id === id){
                 return{...user,...updatedUser};
