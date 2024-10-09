@@ -5,66 +5,66 @@ import { NotFoundException } from '@nestjs/common';
 
 @Injectable()
 export class UsersService {
-    private users=[
+    private users = [
         {
-        "id":1,
-        "userName":"idoHashamen",
-        "firstName":"ido",
-        "lastName":"Rose",
-        "email":"ido98@gmail.com",
-        "password":"123456"
+            "id": 1,
+            "userName": "idoHashamen",
+            "firstName": "ido",
+            "lastName": "Rose",
+            "email": "ido98@gmail.com",
+            "password": "123456"
 
         },
         {
-        "id":2,
-        "userName":"tomervak",
-        "firstName":"tomer",
-        "lastName":"vaknin",
-        "email":"tomervak98@gmail.com",
-        "password":"123456"
+            "id": 2,
+            "userName": "tomervak",
+            "firstName": "tomer",
+            "lastName": "vaknin",
+            "email": "tomervak98@gmail.com",
+            "password": "123456"
         },
         {
-        "id":3,
-        "userName":"donfil",
-        "firstName":"don",
-        "lastName":"fil",
-        "email":"bonfil98@gmail.com",
-        "password":"123456"
+            "id": 3,
+            "userName": "donfil",
+            "firstName": "don",
+            "lastName": "fil",
+            "email": "bonfil98@gmail.com",
+            "password": "123456"
         }
     ]
 
-    findALL(){
+    findALL() {
         return this.users;
     }
 
-    findOne(id:number){
-        const user =this.users.find(user=> user.id === id);
-        if(!user) throw new NotFoundException('no such user');
+    findOne(id: number) {
+        const user = this.users.find(user => user.id === id);
+        if (!user) throw new NotFoundException('no such user');
         return user;
     }
 
-    creat(createUserDto : CreateUserDto){
-        const userByHighestId = [...this.users].sort((a,b)=>b.id-a.id);
-        const newUser={
-            id:userByHighestId[0].id+1,
+    create(createUserDto: CreateUserDto) {
+        const userByHighestId = [...this.users].sort((a, b) => b.id - a.id);
+        const newUser = {
+            id: userByHighestId[0].id + 1,
             ...createUserDto
         };
         this.users.push(newUser);
         return newUser;
     }
 
-    update(id:number, updateUserDto: UpdateUserDto){
-        this.users = this.users.map(user =>{
-            if(user.id === id){
-                return{...user,...updateUserDto};
+    update(id: number, updateUserDto: UpdateUserDto) {
+        this.users = this.users.map(user => {
+            if (user.id === id) {
+                return { ...updateUserDto };
             }
             return user;
         });
         return this.findOne(id);
     }
 
-    delete(id:number){
-        const removedUser=this.findOne(id);
+    delete(id: number) {
+        const removedUser = this.findOne(id);
         this.users = this.users.filter(user => user.id !== id);
         return removedUser;
     }
