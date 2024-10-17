@@ -4,6 +4,7 @@ import { Body, Controller, Delete, Get, Param, Patch, Post,
 import { UsersService } from './users.service';
 import { CreateUserDto } from './dto/create-user.dto';
 import { UpdateUserDto } from './dto/update-user.dto';
+import { loginDto } from './dto/login-user.dto';
 
 @Controller('api/users')
 export class UsersController {
@@ -24,6 +25,11 @@ export class UsersController {
     create(@Body(ValidationPipe) createUserDto : CreateUserDto){
         return this.usersService.create(createUserDto);
     }
+
+    /*@Post('login')
+    async login(@Body() loginDto:loginDto) : Promise<any>{
+        const user = await this.usersService.loginUser(loginDto);
+    }*/
 
     @Put(':id')
     update(@Param('id',ParseIntPipe) id:number,@Body(ValidationPipe) updateUserDto: UpdateUserDto){
