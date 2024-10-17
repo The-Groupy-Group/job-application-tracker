@@ -2,6 +2,8 @@ import { Injectable } from '@nestjs/common';
 import { CreateUserDto } from './dto/create-user.dto';
 import { UpdateUserDto } from './dto/update-user.dto';
 import { NotFoundException } from '@nestjs/common';
+import { loginDto } from './dto/login-user.dto';
+import { hash } from 'bcrypt';
 
 @Injectable()
 export class UsersService {
@@ -12,7 +14,7 @@ export class UsersService {
             "firstName": "ido",
             "lastName": "Rose",
             "email": "ido98@gmail.com",
-            "password": "123456"
+            "passwordHash": "123456"
 
         },
         {
@@ -21,7 +23,7 @@ export class UsersService {
             "firstName": "tomer",
             "lastName": "vaknin",
             "email": "tomervak98@gmail.com",
-            "password": "123456"
+            "passwordHash": "123456"
         },
         {
             "id": 3,
@@ -29,7 +31,7 @@ export class UsersService {
             "firstName": "don",
             "lastName": "fil",
             "email": "bonfil98@gmail.com",
-            "password": "123456"
+            "passwordHash": "123456"
         }
     ]
 
@@ -47,7 +49,8 @@ export class UsersService {
         const userByHighestId = [...this.users].sort((a, b) => b.id - a.id);
         const newUser = {
             id: userByHighestId[0].id + 1,
-            ...createUserDto
+            ...createUserDto,
+            passwordHash: hash(createUserDto.passwordHash, 10)
         };
         this.users.push(newUser);
         return newUser;
@@ -67,5 +70,9 @@ export class UsersService {
         const removedUser = this.findOne(id);
         this.users = this.users.filter(user => user.id !== id);
         return removedUser;
+    }
+
+    login(loginDto : loginDto){
+        
     }
 }
