@@ -50,7 +50,7 @@ export class UsersService {
         const newUser = {
             id: userByHighestId[0].id + 1,
             ...createUserDto,
-            passwordHash: hash(createUserDto.passwordHash, 10)
+            passwordHash: hash(createUserDto.password, 10)
         };
         this.users.push(newUser);
         return newUser;
@@ -59,7 +59,13 @@ export class UsersService {
     update(id: number, updateUserDto: UpdateUserDto) {
         this.users = this.users.map(user => {
             if (user.id === id) {
-                return { ...updateUserDto };
+                return {id:updateUserDto.id,
+                    userName: updateUserDto.userName,
+                    firstName: updateUserDto.firstName,
+                    lastName: updateUserDto.lastName,
+                    email:updateUserDto.email,
+                    passwordHash: hash(updateUserDto.password, 10)
+                };
             }
             return user;
         });

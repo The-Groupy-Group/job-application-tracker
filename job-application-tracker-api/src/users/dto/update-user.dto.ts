@@ -22,5 +22,5 @@ export class UpdateUserDto extends CreateUserDto {
 
     @IsString()
     @IsNotEmpty()
-    passwordHash: string;
+    password: string;
 }
