@@ -1,7 +1,7 @@
 import { IsEmail, IsNotEmpty, IsNumber, IsString } from 'class-validator';
 import { CreateUserDto } from './create-user.dto';
 
-export class UpdateUserDto extends CreateUserDto {
+export class UpdateUserDto{
     @IsNumber()
     id: number;
 
