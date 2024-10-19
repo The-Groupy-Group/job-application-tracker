@@ -30,7 +30,7 @@ const Login: React.FC = () => {
       console.log("Token:", token);
 
       alert("Login successful!");
-      navigate("/dashboard"); // Redirect to dashboard after login
+      navigate("/"); // Redirect to dashboard after login
     } catch (err: any) {
       setError("Invalid email or password");
     } finally {

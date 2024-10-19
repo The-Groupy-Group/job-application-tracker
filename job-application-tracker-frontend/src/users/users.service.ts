@@ -1,11 +1,9 @@
 // src/services/authService.ts
-import axios from "axios";
-
-const API_URL = "https://reqres.in/api";
+import apiClient from "../shared/api-client";
 
 class UsersService {
   async login(email: string, password: string) {
-    const response = await axios.post(`${API_URL}/login`, { email, password });
+    const response = await apiClient.post(`users/login`, { email, password });
 
     const token = response.data.token;
     sessionStorage.setItem("token", token);
@@ -18,6 +16,10 @@ class UsersService {
 
   logout() {
     sessionStorage.removeItem("token");
+  }
+
+  isLoggedIn() {
+    return this.getToken() !== null;
   }
 }
 
