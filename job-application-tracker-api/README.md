@@ -88,5 +88,5 @@ Nest is [MIT licensed](https://github.com/nestjs/nest/blob/master/LICENSE).
 Place in project root
 ```
 DATABASE_CONNECTION_STRING=
-JWT_SECREAT=
+JWT_SECRET=
 ```
