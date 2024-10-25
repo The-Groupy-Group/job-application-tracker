@@ -1,21 +1,28 @@
-import { HttpException, HttpStatus, Injectable } from '@nestjs/common';
+import { BadRequestException, Injectable } from '@nestjs/common';
 import { CreateUserDto } from './dto/create-user.dto';
 import { UpdateUserDto } from './dto/update-user.dto';
 import { NotFoundException } from '@nestjs/common';
-import { loginDto } from './dto/login-user.dto';
+import { LoginDto } from './dto/login.dto';
 import { compare, hash } from 'bcrypt';
-import { User } from './dto/user.dto';
+import { User } from './models/user.model';
+import { JwtService } from '@nestjs/jwt';
+import { LoginResponse } from './dto/login-response.dto';
+import { JwtPayLoad } from 'src/shared/jwt-payload';
+import { Role } from 'src/shared/role';
 
 @Injectable()
 export class UsersService {
-    private users : User[] = [
+    constructor(private readonly jwtService: JwtService,){}
+    
+    private users: User[] = [
         {
             "id": 1,
             "userName": "idoHashamen",
             "firstName": "ido",
             "lastName": "Rose",
             "email": "ido98@gmail.com",
-            "passwordHash": "123456"
+            "passwordHash": "$2a$10$oY3pF8WCLCsBMYFpSeTM.uld80NhHAnX797aasFRZbL1s8hxDMbxS",
+            "roles":[Role.user]
         },
         {
             "id": 2,
@@ -23,7 +30,8 @@ export class UsersService {
             "firstName": "tomer",
             "lastName": "vaknin",
             "email": "tomervak98@gmail.com",
-            "passwordHash": "123456"
+            "passwordHash": "$2a$10$oY3pF8WCLCsBMYFpSeTM.uld80NhHAnX797aasFRZbL1s8hxDMbxS",
+            "roles":[Role.user]
         },
         {
             "id": 3,
@@ -31,51 +39,58 @@ export class UsersService {
             "firstName": "don",
             "lastName": "fil",
             "email": "bonfil98@gmail.com",
-            "passwordHash": "123456"
+            "passwordHash": "$2a$10$oY3pF8WCLCsBMYFpSeTM.uld80NhHAnX797aasFRZbL1s8hxDMbxS",
+            "roles":[Role.admin,Role.user]
         }
     ];
 
-    userResponse(user :User) {
-        return {id:user.id,
+    //TODO: replace with a mapper
+    getUserResponse(user: User) {
+        return {
+            id: user.id,
             userName: user.userName,
-            firstName: user.firstName, 
+            firstName: user.firstName,
             lastName: user.lastName,
-            email:user.email
+            email: user.email
         };
     }
     findALL() {
-        return this.users.map(user => this.userResponse(user));
+        return this.users.map(user => this.getUserResponse(user));
     }
 
     findOne(id: number) {
         const user = this.users.find(user => user.id === id);
         if (!user) throw new NotFoundException('no such user');
-        return this.userResponse(user);
+        return this.getUserResponse(user);
     }
 
-     async create(createUserDto: CreateUserDto) {
+    async create(createUserDto: CreateUserDto) {
         const userByHighestId = [...this.users].sort((a, b) => b.id - a.id);
         const newUser = {
             id: userByHighestId[0].id + 1,
             userName: createUserDto.userName,
             firstName: createUserDto.firstName,
             lastName: createUserDto.lastName,
-            email:createUserDto.email,
-            passwordHash:  await hash(createUserDto.password, 10)
+            email: createUserDto.email,
+            passwordHash: await hash(createUserDto.password, 10),
+            roles:[Role.user]
+
         };
         this.users.push(newUser);
-        return this.userResponse(newUser);
+        return this.getUserResponse(newUser);
     }
 
     async update(id: number, updateUserDto: UpdateUserDto) {
         this.users = await Promise.all(this.users.map(async user => {
             if (user.id === id) {
-                return {id:updateUserDto.id,
+                return {
+                    id: updateUserDto.id,
                     userName: updateUserDto.userName,
-                    firstName: updateUserDto.firstName, 
+                    firstName: updateUserDto.firstName,
                     lastName: updateUserDto.lastName,
-                    email:updateUserDto.email,
-                    passwordHash: await hash(updateUserDto.password, 10)
+                    email: updateUserDto.email,
+                    passwordHash: await hash(updateUserDto.password, 10),
+                    roles:user.roles
                 };
             }
             return user;
@@ -89,16 +104,25 @@ export class UsersService {
         return removedUser;
     }
 
-    async login(loginDto : loginDto): Promise<User>{
-        const user = await this.users.find(user => user.email===loginDto.email);
-        if(!user){
-            throw new HttpException('User not found',HttpStatus.UNPROCESSABLE_ENTITY);
+    async login(loginDto: LoginDto): Promise<LoginResponse>{
+        const user = await this.users.find(user => user.email === loginDto.email);
+        if (!user) {
+            throw new BadRequestException('User not found');
         }
-        
-        const isPasswordCorrect= await compare(loginDto.password,user.passwordHash);
-        if(!isPasswordCorrect){
-            throw new HttpException('Incorrect password',HttpStatus.UNPROCESSABLE_ENTITY); 
+
+        const isPasswordCorrect = await compare(loginDto.password, user.passwordHash);
+        if (!isPasswordCorrect) {
+            throw new BadRequestException('Incorrect password');
         }
-        return user;
+        const tokenPayLoad: JwtPayLoad = {
+            sub: user.id,
+            email: user.email,
+            roles:user.roles
+        };
+        console.log(process.env.JWT_SECRET);
+        const accessToken = await this.jwtService.signAsync(tokenPayLoad);
+        let id : number=user.id;
+        return new LoginResponse(id,accessToken);
+
     }
 }

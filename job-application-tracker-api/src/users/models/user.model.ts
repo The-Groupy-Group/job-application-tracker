@@ -1,4 +1,6 @@
-export class User{
+import { Role } from "src/shared/role";
+
+export class User {
     id: number;
 
     userName: string;
@@ -9,5 +11,7 @@ export class User{
 
     email: string;
 
-    passwordHash:string;
+    passwordHash: string;
+
+    roles: Role[];
 }
