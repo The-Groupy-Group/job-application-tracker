@@ -21,12 +21,12 @@ export class UsersController {
     @UseGuards(AuthGuard)
     @Get()
     findAll(@Request() request: ApiRequest) {
-        if (!request.jwtPayLoad.roles.includes(Role.admin)){
+        if (!request.jwtPayLoad.roles.includes(Role.admin)) {
             throw new BadRequestException('only admin can get all users');
         }
         return this.usersService.findALL();
     }
-    
+
     @UseGuards(AuthGuard)
     @Get(':id')
     findOne(@Request() request: ApiRequest, @Param('id', ParseIntPipe) id: number) {
@@ -53,7 +53,7 @@ export class UsersController {
         @Param('id', ParseIntPipe) id: number,
         @Body(ValidationPipe) updateUserDto: UpdateUserDto
     ) {
-        if (request.jwtPayLoad.sub !== id) {
+        if (request.jwtPayLoad.sub !== id && !request.jwtPayLoad.roles.includes(Role.admin)) {
             throw new BadRequestException('id doesnt match');
         }
         return this.usersService.update(id, updateUserDto);

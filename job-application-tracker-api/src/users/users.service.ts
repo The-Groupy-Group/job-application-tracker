@@ -9,6 +9,7 @@ import { JwtService } from '@nestjs/jwt';
 import { LoginResponse } from './dto/login-response.dto';
 import { JwtPayLoad } from 'src/shared/jwt-payload';
 import { Role } from 'src/shared/role';
+import { UserDto } from './dto/user.dto';
 
 @Injectable()
 export class UsersService {
@@ -45,7 +46,7 @@ export class UsersService {
     ];
 
     //TODO: replace with a mapper
-    getUserResponse(user: User) {
+    getUserResponse(user: User) :UserDto {
         return {
             id: user.id,
             userName: user.userName,
@@ -84,7 +85,7 @@ export class UsersService {
         this.users = await Promise.all(this.users.map(async user => {
             if (user.id === id) {
                 return {
-                    id: updateUserDto.id,
+                    id: user.id,
                     userName: updateUserDto.userName,
                     firstName: updateUserDto.firstName,
                     lastName: updateUserDto.lastName,
