@@ -10,6 +10,7 @@ import { LoginResponse } from './dto/login-response.dto';
 import { JwtPayLoad } from 'src/shared/jwt-payload';
 import { Role } from 'src/shared/role';
 import { UserDto } from './dto/user.dto';
+import { UserMapper } from './user-mapper';
 
 @Injectable()
 export class UsersService {
@@ -45,24 +46,14 @@ export class UsersService {
         }
     ];
 
-    //TODO: replace with a mapper
-    getUserResponse(user: User) :UserDto {
-        return {
-            id: user.id,
-            userName: user.userName,
-            firstName: user.firstName,
-            lastName: user.lastName,
-            email: user.email
-        };
-    }
     findALL() {
-        return this.users.map(user => this.getUserResponse(user));
+        return this.users.map(user => UserMapper.toUserDto(user));
     }
 
     findOne(id: number) {
         const user = this.users.find(user => user.id === id);
         if (!user) throw new NotFoundException('no such user');
-        return this.getUserResponse(user);
+        return UserMapper.toUserDto(user);
     }
 
     async create(createUserDto: CreateUserDto) {
@@ -78,7 +69,7 @@ export class UsersService {
 
         };
         this.users.push(newUser);
-        return this.getUserResponse(newUser);
+        return UserMapper.toUserDto(newUser);
     }
 
     async update(id: number, updateUserDto: UpdateUserDto) {
