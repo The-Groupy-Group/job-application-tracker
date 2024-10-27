@@ -12,7 +12,10 @@ import { LoginResponse } from './dto/login-response.dto';
 import { AuthGuard } from '../shared/guards/auth.guard';
 import { ApiRequest } from 'src/shared/api-request';
 import { Role } from 'src/shared/role';
+import { ApiBearerAuth, ApiCreatedResponse, ApiOperation, ApiResponse, ApiTags } from '@nestjs/swagger';
 
+@ApiBearerAuth()
+@ApiTags('api/users')
 @Controller('api/users')
 export class UsersController {
 
@@ -37,11 +40,17 @@ export class UsersController {
     }
 
     @Post()
+    @ApiCreatedResponse({
+        description: 'craete new user',
+        type:CreateUserDto,
+    })
     create(@Body(ValidationPipe) createUserDto: CreateUserDto) {
         return this.usersService.create(createUserDto);
     }
 
     @Post('login')
+    @ApiOperation({ summary: 'login into existing user' })
+    @ApiResponse({ status: 403, description: 'Forbidden.' })
     async login(@Body() loginDto: LoginDto): Promise<LoginResponse> {
         const loginResponse = await this.usersService.login(loginDto);
         return loginResponse;
