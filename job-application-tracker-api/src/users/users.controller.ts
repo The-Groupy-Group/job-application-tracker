@@ -12,7 +12,7 @@ import { LoginResponse } from './dto/login-response.dto';
 import { AuthGuard } from '../shared/guards/auth.guard';
 import { ApiRequest } from 'src/shared/api-request';
 import { Role } from 'src/shared/role';
-import { ApiBearerAuth, ApiBody, ApiCreatedResponse, ApiOperation, ApiResponse, ApiTags } from '@nestjs/swagger';
+import { ApiBadRequestResponse, ApiBearerAuth, ApiBody, ApiCreatedResponse, ApiNotFoundResponse, ApiOkResponse, ApiOperation, ApiResponse, ApiTags, ApiUnauthorizedResponse } from '@nestjs/swagger';
 import { UserDto } from './dto/user.dto';
 
 @ApiTags('api/users')
@@ -24,11 +24,11 @@ export class UsersController {
 
     @UseGuards(AuthGuard)
     @Get()
-    @ApiResponse({ status: 401, description: 'UnauthorizedException.' })
-    @ApiResponse({ status: 400, description: 'BadRequestException.' })
-    @ApiCreatedResponse({
+    @ApiUnauthorizedResponse()
+    @ApiBadRequestResponse()
+    @ApiOkResponse({
         description: 'array of  UserDTO',
-        type:UserDto[10]
+        type: [UserDto]
     })
     findAll(@Request() request: ApiRequest) {
         if (!request.jwtPayLoad.roles.includes(Role.admin)) {
@@ -40,11 +40,12 @@ export class UsersController {
 
     @UseGuards(AuthGuard)
     @Get(':id')
-    @ApiResponse({ status: 401, description: 'UnauthorizedException.' })
-    @ApiResponse({ status: 400, description: 'BadRequestException.' })
-    @ApiCreatedResponse({
+    @ApiUnauthorizedResponse()
+    @ApiBadRequestResponse()
+    @ApiNotFoundResponse()
+    @ApiOkResponse({
         description: 'UserDTO',
-        type:UserDto
+        type: UserDto
     })
     findOne(@Request() request: ApiRequest, @Param('id', ParseIntPipe) id: number) {
         if (!request.jwtPayLoad.roles.includes(Role.admin) && request.jwtPayLoad.sub !== id) {
@@ -58,7 +59,7 @@ export class UsersController {
     @ApiOperation({ summary: 'create new user' })
     @ApiCreatedResponse({
         description: 'UserDTO',
-        type:UserDto
+        type: UserDto
     })
     create(@Body(ValidationPipe) createUserDto: CreateUserDto) {
         return this.usersService.create(createUserDto);
@@ -67,9 +68,12 @@ export class UsersController {
 
     @Post('login')
     @ApiOperation({ summary: 'login into existing user' })
-    @ApiCreatedResponse({
+    @ApiUnauthorizedResponse()
+    @ApiBadRequestResponse()
+    @ApiNotFoundResponse()
+    @ApiOkResponse({
         description: 'LoginResponse',
-        type:LoginResponse
+        type: LoginResponse
     })
     @ApiResponse({ status: 400, description: 'bad request.' })
     async login(@Body() loginDto: LoginDto): Promise<LoginResponse> {
@@ -80,11 +84,12 @@ export class UsersController {
 
     @UseGuards(AuthGuard)
     @Put(':id')
-    @ApiResponse({ status: 401, description: 'UnauthorizedException.' })
-    @ApiResponse({ status: 400, description: 'BadRequestException.' })
-    @ApiCreatedResponse({
+    @ApiUnauthorizedResponse()
+    @ApiBadRequestResponse()
+    @ApiNotFoundResponse()
+    @ApiOkResponse({
         description: 'UserDTO',
-        type:UserDto
+        type: UserDto
     })
     update(
         @Request() request: ApiRequest,
@@ -100,11 +105,12 @@ export class UsersController {
 
     @UseGuards(AuthGuard)
     @Delete(':id')
-    @ApiResponse({ status: 401, description: 'UnauthorizedException.' })
-    @ApiResponse({ status: 400, description: 'BadRequestException.' })
-    @ApiCreatedResponse({
+    @ApiUnauthorizedResponse()
+    @ApiBadRequestResponse()
+    @ApiNotFoundResponse()
+    @ApiOkResponse({
         description: 'UserDTO',
-        type:UserDto
+        type: UserDto
     })
     delete(@Request() request: ApiRequest,
         @Param('id', ParseIntPipe) id: number) {
