@@ -70,7 +70,6 @@ export class UsersController {
     @ApiOperation({ summary: 'login into existing user' })
     @ApiUnauthorizedResponse()
     @ApiBadRequestResponse()
-    @ApiNotFoundResponse()
     @ApiOkResponse({
         description: 'LoginResponse',
         type: LoginResponse
