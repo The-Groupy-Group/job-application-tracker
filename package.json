@@ -6,8 +6,8 @@
     "start:server": "npm run start:dev --prefix job-application-tracker-api",
     "open:swagger": "start http://localhost:3000/api",
     "start": "concurrently \"npm run start:client\" \"npm run start:server\" \"npm run open:swagger\"",
-    "dependencies:client" : "npm install --prefix job-application-tracker-frontend",
-    "dependencies:server" : "npm install  --prefix job-application-tracker-api",
+    "dependencies:client" : "cd job-application-tracker-frontend && npm install",
+    "dependencies:server" : "cd job-application-tracker-api && npm install",
     "dependencies" : "concurrently \"npm run dependencies:client\" \"npm run dependencies:server\""
   },
   "devDependencies": {
