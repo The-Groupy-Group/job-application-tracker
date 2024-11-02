@@ -4,7 +4,7 @@ import Login from "./users/Login";
 import ProtectedRoute from "./shared/ProtectedRoute ";
 import usersService from "./users/users.service";
 import { useEffect, useState } from "react";
-import { JwtPayLoad } from "./shared/jwt-payload";
+import { TokenPayload } from "./shared/jwt-payload";
 import Register from "./users/Register";
 import { Button } from "@mui/material";
 
@@ -50,7 +50,7 @@ function Home() {
 }
 
 function UserDetails() {
-  const [payload, setPayload] = useState<JwtPayLoad>(null!);
+  const [payload, setPayload] = useState<TokenPayload>(null!);
 
   useEffect(() => {
     const user = usersService.getTokenPayload();

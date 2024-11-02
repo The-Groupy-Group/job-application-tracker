@@ -1,12 +1,14 @@
 // src/services/authService.ts
 import apiClient from "../shared/api-client";
-import { JwtPayLoad } from "../shared/jwt-payload";
+import { TokenPayload } from "../shared/jwt-payload";
 import { jwtDecode } from "jwt-decode";
 import { CreateUserRequest } from "./models/create-user";
+import { AxiosResponse } from "axios";
 
 class UsersService {
   async login(email: string, password: string) {
-    const response = await apiClient.post(`users/login`, { email, password });
+    const response: AxiosResponse<{ accessToken: string }> =
+      await apiClient.post(`users/login`, { email, password });
 
     const token = response.data.accessToken;
     sessionStorage.setItem("token", token);
@@ -20,12 +22,12 @@ class UsersService {
     return sessionStorage.getItem("token");
   }
 
-  getTokenPayload(): JwtPayLoad {
+  getTokenPayload(): TokenPayload {
     const token = this.getToken();
 
     if (!token) throw new Error("No token found");
 
-    const res: JwtPayLoad = jwtDecode(token);
+    const res: TokenPayload = jwtDecode(token);
 
     return res;
   }
