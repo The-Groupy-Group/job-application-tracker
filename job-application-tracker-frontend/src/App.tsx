@@ -50,7 +50,7 @@ function Home() {
 }
 
 function UserDetails() {
-  const [payload, setPayload] = useState<TokenPayload>(null!);
+  const [payload, setPayload] = useState<TokenPayload>({} as TokenPayload);
 
   useEffect(() => {
     const user = usersService.getTokenPayload();
