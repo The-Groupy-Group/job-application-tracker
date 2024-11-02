@@ -4,7 +4,7 @@ import { User } from "./models/user.model";
 export class UserMapper {
     static toUserDto(user: User) : UserDto {
         return {
-            id: user.id,
+            id: user._id ,
             userName: user.userName,
             firstName: user.firstName,
             lastName: user.lastName,
