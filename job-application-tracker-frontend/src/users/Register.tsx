@@ -1,18 +1,21 @@
-// src/components/Login.tsx
-import React, { useState } from "react";
 import {
-  Button,
-  TextField,
-  Box,
-  Typography,
   Container,
   CssBaseline,
+  Box,
+  Typography,
   Alert,
+  TextField,
+  Button,
 } from "@mui/material";
+
+import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import UsersService from "./users.service";
 
-const Login: React.FC = () => {
+const Register: React.FC = () => {
+  const [userName, setUserName] = useState("");
+  const [firstName, setFirstName] = useState("");
+  const [lastName, setLastName] = useState("");
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [error, setError] = useState<string | null>(null);
@@ -24,10 +27,19 @@ const Login: React.FC = () => {
     event.preventDefault();
     setLoading(true);
     setError(null); // Clear previous errors
+
     try {
+      await UsersService.register({
+        userName,
+        firstName,
+        lastName,
+        email,
+        password,
+      });
+
       await UsersService.login(email, password);
 
-      navigate("/"); // Redirect after login
+      navigate("/");
     } catch (err: any) {
       setError("Invalid email or password");
     } finally {
@@ -47,7 +59,7 @@ const Login: React.FC = () => {
         }}
       >
         <Typography component="h1" variant="h5">
-          Login
+          Register
         </Typography>
         {error && (
           <Alert severity="error" sx={{ mt: 2 }}>
@@ -55,6 +67,42 @@ const Login: React.FC = () => {
           </Alert>
         )}
         <Box component="form" onSubmit={handleSubmit} noValidate sx={{ mt: 1 }}>
+          <TextField
+            margin="normal"
+            required
+            fullWidth
+            id="userName"
+            label="User Name"
+            name="userName"
+            autoComplete="userName"
+            autoFocus
+            value={userName}
+            onChange={(e) => setUserName(e.target.value)}
+          />
+          <TextField
+            margin="normal"
+            required
+            fullWidth
+            id="firstName"
+            label="First Name"
+            name="firstName"
+            autoComplete="firstName"
+            autoFocus
+            value={firstName}
+            onChange={(e) => setFirstName(e.target.value)}
+          />
+          <TextField
+            margin="normal"
+            required
+            fullWidth
+            id="lastName"
+            label="Last Name"
+            name="lastName"
+            autoComplete="lastName"
+            autoFocus
+            value={lastName}
+            onChange={(e) => setLastName(e.target.value)}
+          />
           <TextField
             margin="normal"
             required
@@ -86,14 +134,12 @@ const Login: React.FC = () => {
             sx={{ mt: 3, mb: 2 }}
             disabled={loading}
           >
-            {loading ? "Logging in..." : "Login"}
+            {loading ? "Registering..." : "Register"}
           </Button>
-          {/* Registration link */}
-          <a href="/register">Don't have an account? Register</a>
         </Box>
       </Box>
     </Container>
   );
 };
 
-export default Login;
+export default Register;

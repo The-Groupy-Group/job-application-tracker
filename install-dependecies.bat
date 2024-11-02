@@ -1,0 +1,3 @@
+@echo off
+echo Downloading dependencies...
+npm run dependencies

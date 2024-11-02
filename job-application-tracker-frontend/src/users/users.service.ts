@@ -1,17 +1,35 @@
 // src/services/authService.ts
 import apiClient from "../shared/api-client";
+import { TokenPayload } from "../shared/jwt-payload";
+import { jwtDecode } from "jwt-decode";
+import { CreateUserRequest } from "./models/create-user";
+import { AxiosResponse } from "axios";
 
 class UsersService {
   async login(email: string, password: string) {
-    const response = await apiClient.post(`users/login`, { email, password });
+    const response: AxiosResponse<{ accessToken: string }> =
+      await apiClient.post(`users/login`, { email, password });
 
-    const token = response.data.token;
+    const token = response.data.accessToken;
     sessionStorage.setItem("token", token);
-
-    return token;
   }
+
+  async register(request: CreateUserRequest) {
+    await apiClient.post(`users`, request);
+  }
+
   getToken() {
     return sessionStorage.getItem("token");
+  }
+
+  getTokenPayload(): TokenPayload {
+    const token = this.getToken();
+
+    if (!token) throw new Error("No token found");
+
+    const res: TokenPayload = jwtDecode(token);
+
+    return res;
   }
 
   logout() {
