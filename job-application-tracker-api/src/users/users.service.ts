@@ -9,49 +9,47 @@ import { JwtService } from '@nestjs/jwt';
 import { LoginResponse } from './dto/login-response.dto';
 import { JwtPayLoad } from 'src/shared/jwt-payload';
 import { Role } from 'src/shared/role';
-import { UserDto } from './dto/user.dto';
 import { UserMapper } from './user-mapper';
-import { Model } from 'mongoose';
-import { InjectModel } from '@nestjs/mongoose';
+import { UserRepository } from './user.repository';
 
 @Injectable()
 export class UsersService {
     constructor(private readonly jwtService: JwtService,
-        @InjectModel(User.name) private userModel: Model<User>
+        private readonly userRepository: UserRepository
     ) { }
 
 
     async findALL() {
-        const users = await this.userModel.find().exec();
+        const users = await this.userRepository.findAll();
         return users.map(user => UserMapper.toUserDto(user))
 
     }
 
     async findOne(id: string) {
-        const user = await this.userModel.findById(id);
+        const user = await this.userRepository.findById(id);
         if (!user) throw new NotFoundException('no such user');
         return UserMapper.toUserDto(user);
     }
 
     async create(createUserDto: CreateUserDto) {
-        
+
         const passwordHash = await hash(createUserDto.password, 10);
 
-        const newUser = new this.userModel({
+        const newUser = {
             userName: createUserDto.userName,
             firstName: createUserDto.firstName,
             lastName: createUserDto.lastName,
             email: createUserDto.email,
             passwordHash: passwordHash,
             roles: [Role.user],
-        });
+        };
 
-        const savedUser = await newUser.save();
+        const savedUser = await this.userRepository.create(newUser);
         return UserMapper.toUserDto(savedUser);
     }
 
     async update(id: string, updateUserDto: UpdateUserDto) {
-        const user = await this.userModel.findById(id);
+        const user = await this.userRepository.findById(id);
         if (!user) {
             throw new NotFoundException('User not found');
         }
@@ -62,12 +60,12 @@ export class UsersService {
         if (updateUserDto.password) {
             user.passwordHash = await hash(updateUserDto.password, 10);
         }
-        const updatedUser = await user.save();
+        const updatedUser = await this.userRepository.update(id,user);
         return UserMapper.toUserDto(updatedUser);
     }
 
     async delete(id: string) {
-        const deletedUser = await this.userModel.findByIdAndDelete(id);
+        const deletedUser = await this.userRepository.delete(id);
 
         if (!deletedUser) {
             throw new NotFoundException('User not found');
@@ -77,8 +75,7 @@ export class UsersService {
     }
 
     async login(loginDto: LoginDto): Promise<LoginResponse> {
-        const email =loginDto.email;
-        const user = await this.userModel.findOne({email});
+        const user = await this.userRepository.findByEmail(loginDto.email);
         if (!user) {
             throw new BadRequestException('User not found');
         }
@@ -89,12 +86,12 @@ export class UsersService {
         }
 
         const tokenPayLoad: JwtPayLoad = {
-            sub: user.id,
+            sub: user._id,
             email: user.email,
             roles: user.roles
         };
         const accessToken = await this.jwtService.signAsync(tokenPayLoad);
-        let id: string = user.id;
+        let id: string = user._id;
         return new LoginResponse(id, accessToken);
 
     }

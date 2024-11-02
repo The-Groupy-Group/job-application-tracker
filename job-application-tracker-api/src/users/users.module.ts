@@ -5,11 +5,12 @@ import { JwtModule } from '@nestjs/jwt';
 import { ConfigModule } from '@nestjs/config';
 import { MongooseModule } from '@nestjs/mongoose';
 import { User, UserSchema } from './models/user.model';
+import { UserRepository } from './user.repository';
 
 
 @Module({
     controllers: [UsersController],
-    providers: [UsersService],
+    providers: [UsersService, UserRepository],
     imports:
         [MongooseModule.forFeature([
             {

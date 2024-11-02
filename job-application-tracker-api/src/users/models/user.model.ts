@@ -1,5 +1,4 @@
 import { Schema, Prop, SchemaFactory } from "@nestjs/mongoose";
-import { ObjectId } from "mongoose";
 import { Role } from "src/shared/role";
 
 @Schema()
