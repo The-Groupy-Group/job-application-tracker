@@ -26,10 +26,8 @@ const Login: React.FC = () => {
     setError(null); // Clear previous errors
 
     try {
-      const token = await UsersService.login(email, password);
-      console.log("Token:", token);
+      await UsersService.login(email, password);
 
-      alert("Login successful!");
       navigate("/"); // Redirect to dashboard after login
     } catch (err: any) {
       setError("Invalid email or password");

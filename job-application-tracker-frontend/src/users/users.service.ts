@@ -1,17 +1,28 @@
 // src/services/authService.ts
 import apiClient from "../shared/api-client";
+import { JwtPayLoad } from "../shared/jwt-payload";
+import { jwtDecode } from "jwt-decode";
 
 class UsersService {
   async login(email: string, password: string) {
     const response = await apiClient.post(`users/login`, { email, password });
 
-    const token = response.data.token;
+    const token = response.data.accessToken;
     sessionStorage.setItem("token", token);
-
-    return token;
   }
+
   getToken() {
     return sessionStorage.getItem("token");
+  }
+
+  getTokenPayload(): JwtPayLoad {
+    const token = this.getToken();
+
+    if (!token) throw new Error("No token found");
+
+    const res: JwtPayLoad = jwtDecode(token);
+
+    return res;
   }
 
   logout() {
