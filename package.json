@@ -5,7 +5,10 @@
     "start:client": "npm start --prefix job-application-tracker-frontend",
     "start:server": "npm run start:dev --prefix job-application-tracker-api",
     "open:swagger": "start http://localhost:3000/api",
-    "start": "concurrently \"npm run start:client\" \"npm run start:server\" \"npm run open:swagger\""
+    "start": "concurrently \"npm run start:client\" \"npm run start:server\" \"npm run open:swagger\"",
+    "dependencies:client" : "npm install --prefix job-application-tracker-frontend",
+    "dependencies:server" : "npm install  --prefix job-application-tracker-api",
+    "dependencies" : "concurrently \"npm run dependencies:client\" \"npm run dependencies:server\""
   },
   "devDependencies": {
     "concurrently": "^9.0.1"

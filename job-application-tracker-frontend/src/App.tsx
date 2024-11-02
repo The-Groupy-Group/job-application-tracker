@@ -31,11 +31,10 @@ function App() {
 }
 
 function Home() {
-  const navigate = useNavigate();
   return (
     <>
       home <br />
-      You are logged in as <UserEmail />
+      You are logged in as <UserDetails />
       <Button
         variant="contained"
         color="primary"
@@ -50,8 +49,8 @@ function Home() {
   );
 }
 
-function UserEmail() {
-  const [payload, setPayload] = useState({} as JwtPayLoad);
+function UserDetails() {
+  const [payload, setPayload] = useState<JwtPayLoad>(null!);
 
   useEffect(() => {
     const user = usersService.getTokenPayload();
