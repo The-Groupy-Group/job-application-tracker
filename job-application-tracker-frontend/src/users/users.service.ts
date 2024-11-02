@@ -2,6 +2,7 @@
 import apiClient from "../shared/api-client";
 import { JwtPayLoad } from "../shared/jwt-payload";
 import { jwtDecode } from "jwt-decode";
+import { CreateUserRequest } from "./models/create-user";
 
 class UsersService {
   async login(email: string, password: string) {
@@ -9,6 +10,10 @@ class UsersService {
 
     const token = response.data.accessToken;
     sessionStorage.setItem("token", token);
+  }
+
+  async register(request: CreateUserRequest) {
+    await apiClient.post(`users`, request);
   }
 
   getToken() {
