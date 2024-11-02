@@ -48,6 +48,6 @@ To learn React, check out the [React documentation](https://reactjs.org/).
 ## ```.env``` file
 Place in project root
 ```
-REACT_APP_BASE_API_URL=
-REACT_APP_PORT=
+REACT_APP_BASE_API_URL=http://localhost:3000
+PORT=3001
 ```
