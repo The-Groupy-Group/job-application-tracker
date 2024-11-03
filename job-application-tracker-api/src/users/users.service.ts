@@ -32,7 +32,7 @@ export class UsersService {
     }
 
     async create(createUserDto: CreateUserDto) {
-        if(this.userRepository.findByEmail(createUserDto.email)){
+        if (this.userRepository.findByEmail(createUserDto.email)) {
             throw new BadRequestException('this email is being used by a different user');
         }
         const passwordHash = await hash(createUserDto.password, 10);
@@ -50,8 +50,8 @@ export class UsersService {
         return UserMapper.toUserDto(savedUser);
     }
 
-    async update(id: string, updateUserDto: UpdateUserDto) {
-        const user = await this.userRepository.findById(id);
+    async update(applicationId: string, updateUserDto: UpdateUserDto) {
+        const user = await this.userRepository.findById(applicationId);
         if (!user) {
             throw new NotFoundException('User not found');
         }
@@ -59,15 +59,15 @@ export class UsersService {
         user.firstName = updateUserDto.firstName;
         user.lastName = updateUserDto.lastName;
         user.email = updateUserDto.email;
-        let emailUser=this.userRepository.findByEmail(user.email);
-        if(emailUser){
-            if((await emailUser)._id !== id)
+        const emailUser = this.userRepository.findByEmail(user.email);
+        if (emailUser) {
+            if ((await emailUser)._id !== applicationId)
                 throw new BadRequestException('this email is being used by a different user');
         }
         if (updateUserDto.password) {
             user.passwordHash = await hash(updateUserDto.password, 10);
         }
-        const updatedUser = await this.userRepository.update(id,user);
+        const updatedUser = await this.userRepository.update(applicationId, user);
         return UserMapper.toUserDto(updatedUser);
     }
 
@@ -98,7 +98,7 @@ export class UsersService {
             roles: user.roles
         };
         const accessToken = await this.jwtService.signAsync(tokenPayLoad);
-        let id: string = user._id;
+        const id: string = user._id;
         return new LoginResponse(id, accessToken);
 
     }
