@@ -30,7 +30,7 @@ export class UsersController {
         description: 'array of  UserDTO',
         type: [UserDto]
     })
-    findAll(@Request() request: ApiRequest) {
+    async findAll(@Request() request: ApiRequest) {
         if (!request.jwtPayLoad.roles.includes(Role.admin)) {
             throw new BadRequestException('only admin can get all users');
         }
@@ -47,7 +47,7 @@ export class UsersController {
         description: 'UserDTO',
         type: UserDto
     })
-    findOne(@Request() request: ApiRequest, @Param('id', ParseIntPipe) id: number) {
+    async findOne(@Request() request: ApiRequest, @Param('id') id: string) {
         if (!request.jwtPayLoad.roles.includes(Role.admin) && request.jwtPayLoad.sub !== id) {
             throw new BadRequestException('you are not allowed to get this user');
         }
@@ -61,7 +61,8 @@ export class UsersController {
         description: 'UserDTO',
         type: UserDto
     })
-    create(@Body(ValidationPipe) createUserDto: CreateUserDto) {
+    @ApiBadRequestResponse()
+    async create(@Body(ValidationPipe) createUserDto: CreateUserDto) {
         return this.usersService.create(createUserDto);
     }
 
@@ -90,9 +91,9 @@ export class UsersController {
         description: 'UserDTO',
         type: UserDto
     })
-    update(
+    async update(
         @Request() request: ApiRequest,
-        @Param('id', ParseIntPipe) id: number,
+        @Param('id') id: string,
         @Body(ValidationPipe) updateUserDto: UpdateUserDto
     ) {
         if (request.jwtPayLoad.sub !== id && !request.jwtPayLoad.roles.includes(Role.admin)) {
@@ -111,8 +112,8 @@ export class UsersController {
         description: 'UserDTO',
         type: UserDto
     })
-    delete(@Request() request: ApiRequest,
-        @Param('id', ParseIntPipe) id: number) {
+    async delete(@Request() request: ApiRequest,
+        @Param('id') id: string) {
         if (!request.jwtPayLoad.roles.includes(Role.admin) && request.jwtPayLoad.sub !== id) {
             throw new BadRequestException('you are not allowed to delete this user');
         }
