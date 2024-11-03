@@ -32,7 +32,7 @@ export class UsersService {
     }
 
     async create(createUserDto: CreateUserDto) {
-        if(!this.userRepository.findByEmail(createUserDto.email)){
+        if(this.userRepository.findByEmail(createUserDto.email)){
             throw new BadRequestException('this email is being used by a different user');
         }
         const passwordHash = await hash(createUserDto.password, 10);
@@ -59,6 +59,11 @@ export class UsersService {
         user.firstName = updateUserDto.firstName;
         user.lastName = updateUserDto.lastName;
         user.email = updateUserDto.email;
+        let emailUser=this.userRepository.findByEmail(user.email);
+        if(emailUser){
+            if((await emailUser)._id !== id)
+                throw new BadRequestException('this email is being used by a different user');
+        }
         if (updateUserDto.password) {
             user.passwordHash = await hash(updateUserDto.password, 10);
         }
