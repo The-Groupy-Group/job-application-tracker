@@ -61,6 +61,7 @@ export class UsersController {
         description: 'UserDTO',
         type: UserDto
     })
+    @ApiBadRequestResponse()
     async create(@Body(ValidationPipe) createUserDto: CreateUserDto) {
         return this.usersService.create(createUserDto);
     }
