@@ -10,7 +10,7 @@ import { UpdateApplicationDto } from './dto/update-application.dto';
 
 @ApiTags('api/applications')
 @UseGuards(AuthGuard)
-@Controller('applications')
+@Controller('api/applications')
 export class ApplicationsController {
 
     constructor(private readonly applicationService: ApplicationsService) { }
