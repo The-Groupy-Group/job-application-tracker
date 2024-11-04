@@ -7,6 +7,7 @@ import { useEffect, useState } from "react";
 import { TokenPayload } from "./shared/jwt-payload";
 import Register from "./users/Register";
 import { Button } from "@mui/material";
+import { ApplicationsPage } from "./applications/ApplicationsPage";
 
 function App() {
   return (
@@ -45,6 +46,7 @@ function Home() {
       >
         Log out
       </Button>
+      <ApplicationsPage />
     </>
   );
 }

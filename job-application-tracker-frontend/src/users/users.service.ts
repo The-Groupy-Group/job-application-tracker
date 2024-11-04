@@ -2,13 +2,15 @@
 import apiClient from "../shared/api-client";
 import { TokenPayload } from "../shared/jwt-payload";
 import { jwtDecode } from "jwt-decode";
-import { CreateUserRequest } from "./models/create-user";
-import { AxiosResponse } from "axios";
+import { CreateUserRequest } from "./models/create-user-request";
+import { AxiosInstance, AxiosResponse } from "axios";
 
 class UsersService {
+  constructor(private readonly apiClient: AxiosInstance) {}
+  
   async login(email: string, password: string) {
     const response: AxiosResponse<{ accessToken: string }> =
-      await apiClient.post(`users/login`, { email, password });
+      await this.apiClient.post(`users/login`, { email, password });
 
     const token = response.data.accessToken;
     sessionStorage.setItem("token", token);
@@ -41,4 +43,4 @@ class UsersService {
   }
 }
 
-export default new UsersService();
+export default new UsersService(apiClient);

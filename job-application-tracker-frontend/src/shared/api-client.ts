@@ -5,7 +5,7 @@ import { StatusCodes } from "http-status-codes";
 const API_URL = process.env.REACT_APP_BASE_API_URL;
 
 const axiosInstance = axios.create({
-  baseURL: API_URL+"/api",
+  baseURL: API_URL + "/api",
   headers: {
     "Content-Type": "application/json",
   },
