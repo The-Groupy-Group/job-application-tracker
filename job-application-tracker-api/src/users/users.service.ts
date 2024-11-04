@@ -4,7 +4,6 @@ import { UpdateUserDto } from './dto/update-user.dto';
 import { NotFoundException } from '@nestjs/common';
 import { LoginDto } from './dto/login.dto';
 import { compare, hash } from 'bcrypt';
-import { User } from './models/user.model';
 import { JwtService } from '@nestjs/jwt';
 import { LoginResponse } from './dto/login-response.dto';
 import { JwtPayLoad } from 'src/shared/jwt-payload';

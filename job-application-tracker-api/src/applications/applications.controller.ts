@@ -1,5 +1,5 @@
 import { BadRequestException, Body, Controller, Delete, Get, Param, Post, Put, Request, UseGuards, ValidationPipe } from '@nestjs/common';
-import { ApiBadRequestResponse, ApiCreatedResponse, ApiNotFoundResponse, ApiOkResponse, ApiOperation, ApiTags, ApiUnauthorizedResponse } from '@nestjs/swagger';
+import { ApiCreatedResponse, ApiOkResponse, ApiOperation, ApiTags } from '@nestjs/swagger';
 import { ApplicationsService } from './applications.service';
 import { AuthGuard } from 'src/shared/guards/auth.guard';
 import { ApplicationDto } from './dto/application.dto';
@@ -43,8 +43,12 @@ export class ApplicationsController {
         description: 'applicationDto',
         type: ApplicationDto
     })
-    async create(@Request() request: ApiRequest, @Body(ValidationPipe) createApplicationDto: CreateApplicationDto) {
-        if (!request.jwtPayLoad.roles.includes(Role.admin) && request.jwtPayLoad.sub !== createApplicationDto.userId) throw new BadRequestException('user id doesnt match');
+    async create(@Request() request: ApiRequest,
+        @Body(ValidationPipe) createApplicationDto: CreateApplicationDto) {
+        if (!request.jwtPayLoad.roles.includes(Role.admin) &&
+            request.jwtPayLoad.sub !== createApplicationDto.userId) {
+            throw new BadRequestException('user id doesnt match');
+        }
         return await this.applicationService.create(createApplicationDto);
     }
 

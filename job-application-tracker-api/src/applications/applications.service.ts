@@ -35,10 +35,10 @@ export class ApplicationsService {
             throw new NotFoundException('no such user');
         }
 
-        const newApplication = {
+        const newApplication : CreateApplicationDto = {
             companyName: createApplicationDto.companyName,
             position: createApplicationDto.position,
-            States: createApplicationDto.states,
+            states: createApplicationDto.states,
             userId: createApplicationDto.userId
         };
 

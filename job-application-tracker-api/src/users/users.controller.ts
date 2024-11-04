@@ -12,7 +12,7 @@ import { LoginResponse } from './dto/login-response.dto';
 import { AuthGuard } from '../shared/guards/auth.guard';
 import { ApiRequest } from 'src/shared/api-request';
 import { Role } from 'src/shared/role';
-import { ApiBadRequestResponse, ApiBearerAuth, ApiBody, ApiCreatedResponse, ApiNotFoundResponse, ApiOkResponse, ApiOperation, ApiResponse, ApiTags, ApiUnauthorizedResponse } from '@nestjs/swagger';
+import { ApiBadRequestResponse, ApiCreatedResponse, ApiNotFoundResponse, ApiOkResponse, ApiOperation, ApiResponse, ApiTags, ApiUnauthorizedResponse } from '@nestjs/swagger';
 import { UserDto } from './dto/user.dto';
 
 @ApiTags('api/users')
