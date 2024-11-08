@@ -8,6 +8,7 @@ import { TokenPayload } from "./shared/jwt-payload";
 import Register from "./users/Register";
 import { Button } from "@mui/material";
 import { ApplicationsPage } from "./applications/ApplicationsPage";
+import Header from "./shared/Header";
 
 function App() {
   return (
@@ -34,34 +35,8 @@ function App() {
 function Home() {
   return (
     <>
-      home <br />
-      You are logged in as <UserDetails />
-      <Button
-        variant="contained"
-        color="primary"
-        onClick={() => {
-          usersService.logout();
-          window.location.reload();
-        }}
-      >
-        Log out
-      </Button>
+      <Header />
       <ApplicationsPage />
-    </>
-  );
-}
-
-function UserDetails() {
-  const [payload, setPayload] = useState<TokenPayload>({} as TokenPayload);
-
-  useEffect(() => {
-    const user = usersService.getTokenPayload();
-    setPayload(user);
-  }, []);
-
-  return (
-    <>
-      Email: {payload.email} Id: {payload.sub}
     </>
   );
 }
