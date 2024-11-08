@@ -8,20 +8,28 @@ export class ApplicationsLocalService extends ApplicationsService {
   constructor() {
     super(null!);
     this.applications = [
-        {
-            id: "1",
-            companyName: "Google",
-            position: "Software Engineer",
-            userId: "1",
-            currentState: null,
+      {
+        id: "1",
+        companyName: "Google",
+        position: "Software Engineer",
+        userId: "1",
+        currentState: {
+          title: "Applied",
+          description: "You have applied to this position",
+          dueDate: new Date(),
         },
-        {
-            id: "2",
-            companyName: "Facebook",
-            position: "Product Manager",
-            userId: "1",
-            currentState: null,
+      },
+      {
+        id: "2",
+        companyName: "Facebook",
+        position: "Product Manager",
+        userId: "1",
+        currentState: {
+          title: "Applied",
+          description: "You have applied to this position",
+          dueDate: new Date(),
         },
+      },
     ];
   }
   async getApplications(): Promise<Application[]> {
@@ -38,7 +46,12 @@ export class ApplicationsLocalService extends ApplicationsService {
     const newApplication: Application = {
       ...request,
       id: Math.random().toString(36).substr(2, 9),
-      currentState: null,
+      userId: "1",
+      currentState: {
+        title: "Applied",
+        description: "You have applied to this position",
+        dueDate: new Date(),
+      },
     };
 
     this.applications.push(newApplication);

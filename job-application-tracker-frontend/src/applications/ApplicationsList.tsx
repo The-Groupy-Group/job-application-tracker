@@ -1,8 +1,10 @@
 import { useEffect, useState } from "react";
 import applicationsService from "./applications-local.service";
 import { Application } from "./models/application";
+import { Box, Typography, Container, CssBaseline } from "@mui/material";
 import { CreateApplicationRequest } from "./models/create-application-request";
 import { UpdateApplicationRequest } from "./models/update-application-request";
+import ApplicationListItem from "./ApplicationListItem";
 
 export const ApplicationsList = () => {
   const [applications, setApplications] = useState<Application[]>([]);
@@ -20,28 +22,20 @@ export const ApplicationsList = () => {
   };
 
   return (
-    <div>
-      <h1>Applications</h1>
-        <button
-            onClick={() => {
-            const newApp: CreateApplicationRequest = {
-                companyName: "New Company",
-                position: "New Position",
-                userId: "1",
-            };
-            applicationsService.createApplication(newApp).then((app) => {
-                setApplications([...applications, app]);
-            });
-            }}>Create application </button>
-      <ul>
-        {applications.map((app) => (
-          <li key={app.id}>
-            <h2>{app.companyName}</h2>
-            <p>{app.position}</p>
-            <button onClick={() => handleDelete(app.id)}>Delete</button>
-          </li>
-        ))}
-      </ul>
-    </div>
+    <Box
+      sx={{
+        display: "flex",
+        flexDirection: "column",
+        alignItems: "center",
+      }}
+    >
+      {applications.map((app) => (
+        <ApplicationListItem
+          key={app.id}
+          application={app}
+          handleDelete={handleDelete}
+        />
+      ))}
+    </Box>
   );
 };

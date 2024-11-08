@@ -1,12 +1,8 @@
 import "./App.css";
-import { BrowserRouter, Routes, Route, useNavigate } from "react-router-dom";
+import { BrowserRouter, Routes, Route } from "react-router-dom";
 import Login from "./users/Login";
 import ProtectedRoute from "./shared/ProtectedRoute ";
-import usersService from "./users/users.service";
-import { useEffect, useState } from "react";
-import { TokenPayload } from "./shared/jwt-payload";
 import Register from "./users/Register";
-import { Button } from "@mui/material";
 import { ApplicationsPage } from "./applications/ApplicationsPage";
 import Header from "./shared/Header";
 
