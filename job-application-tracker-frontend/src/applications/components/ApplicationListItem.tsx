@@ -1,18 +1,31 @@
-import * as mui from "@mui/material";
+import { Box, Button, Typography } from "@mui/material";
 import { Application } from "../models/application";
 import ApplicationState from "../models/application-state";
+import { useState } from "react";
+import ApplicationStateForm from "./ApplicationStateForm";
 
 interface ApplicationListItemProps {
   application: Application;
-  handleDelete: (id: string) => void;
+  onDelete: (id: string) => void;
 }
 
 const ApplicationListItem: React.FC<ApplicationListItemProps> = ({
   application,
-  handleDelete: onDelete,
+  onDelete,
 }: ApplicationListItemProps) => {
+  const [isApplicationCreationOpen, setIsApplicationCreationOpen] =
+    useState(false);
+
+  const handleCloseApplicationCreation = () => {
+    setIsApplicationCreationOpen(false);
+  };
+
+  const handleOpenApplicationCreation = () => {
+    setIsApplicationCreationOpen(true);
+  };
+
   return (
-    <mui.Box
+    <Box
       key={application.id}
       sx={{
         display: "flex",
@@ -23,18 +36,29 @@ const ApplicationListItem: React.FC<ApplicationListItemProps> = ({
         margin: 2,
       }}
     >
-      <mui.Typography variant="h6">{application.companyName}</mui.Typography>
-      <mui.Typography>{application.position}</mui.Typography>
+      <Typography variant="h6">{application.companyName}</Typography>
+      <Typography>{application.position}</Typography>
       <ApplicationStateInfo state={application.currentState} />
-
-      <mui.Button
+      <Button
+        variant="contained"
+        color="primary"
+        onClick={handleOpenApplicationCreation}
+      >
+        Add State
+      </Button>
+      <ApplicationStateForm
+        open={isApplicationCreationOpen}
+        onClose={handleCloseApplicationCreation}
+        onApplicationStateAdded={() => {}}
+      />
+      <Button
         variant="contained"
         color="secondary"
         onClick={() => onDelete(application.id)}
       >
         Delete
-      </mui.Button>
-    </mui.Box>
+      </Button>
+    </Box>
   );
 };
 
@@ -42,17 +66,17 @@ const ApplicationStateInfo: React.FC<{ state: ApplicationState }> = ({
   state,
 }) => {
   return (
-    <mui.Box
+    <Box
       sx={{
         display: "flex",
         flexDirection: "column",
         alignItems: "flex-start",
       }}
     >
-      <mui.Typography>{state.title}</mui.Typography>
-      <mui.Typography>{state.description}</mui.Typography>
-      <mui.Typography>{state.dueDate.toDateString()}</mui.Typography>
-    </mui.Box>
+      <Typography>{state.title}</Typography>
+      <Typography>{state.description}</Typography>
+      <Typography>{state.dueDate.toDateString()}</Typography>
+    </Box>
   );
 };
 

@@ -25,7 +25,7 @@ export const ApplicationsList = ({
         <ApplicationListItem
           key={app.id}
           application={app}
-          handleDelete={onApplicationDeleted}
+          onDelete={onApplicationDeleted}
         />
       ))}
     </Box>
