@@ -11,13 +11,13 @@ import applicationsService from "../services/applications.service";
 
 interface ApplicationCreationFormProps {
   open: boolean;
-  handleClose: () => void;
+  onClose: () => void;
   onApplicationCreated: () => void;
 }
 
 const ApplicationCreationForm = ({
   open,
-  handleClose,
+  onClose: handleClose,
   onApplicationCreated,
 }: ApplicationCreationFormProps) => {
   const [companyName, setCompanyName] = useState("");

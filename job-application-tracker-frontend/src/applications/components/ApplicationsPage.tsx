@@ -7,23 +7,24 @@ import applicationsService from "../services/applications.service";
 
 export const ApplicationsPage = () => {
   const [applications, setApplications] = useState<Application[]>([]);
-  const [applicationCreationOpen, setApplicationCreationOpen] = useState(false);
+  const [isApplicationCreationOpen, setIsApplicationCreationOpen] =
+    useState(false);
 
-  const handleClose = () => {
-    setApplicationCreationOpen(false);
+  const handleCloseApplicationCreation = () => {
+    setIsApplicationCreationOpen(false);
   };
 
-  const handleOpen = () => {
-    setApplicationCreationOpen(true);
+  const handleOpenApplicationCreation = () => {
+    setIsApplicationCreationOpen(true);
   };
 
-  const onApplicationCreated = () => {
+  const handleApplicationCreated = () => {
     applicationsService.getApplications().then((data) => {
       setApplications(data);
     });
   };
 
-  const onApplicationDeleted = (id: string) => {
+  const handleApplicationDeleted = (id: string) => {
     applicationsService.deleteApplication(id).then(() => {
       setApplications(applications.filter((app) => app.id !== id));
     });
@@ -53,23 +54,21 @@ export const ApplicationsPage = () => {
           <Button
             variant="contained"
             color="primary"
-            onClick={handleOpen}
-            sx={{ marginTop: 2 }}
+            onClick={handleOpenApplicationCreation}
           >
-            Create Application
+            Add Application
           </Button>
-
+          <ApplicationCreationForm
+            open={isApplicationCreationOpen}
+            onClose={handleCloseApplicationCreation}
+            onApplicationCreated={handleApplicationCreated}
+          />
           <ApplicationsList
             applications={applications}
-            handleDelete={onApplicationDeleted}
+            onApplicationDeleted={handleApplicationDeleted}
           />
         </Box>
       </Container>
-      <ApplicationCreationForm
-        open={applicationCreationOpen}
-        handleClose={handleClose}
-        onApplicationCreated={onApplicationCreated}
-      />
     </>
   );
 };

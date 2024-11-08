@@ -6,12 +6,12 @@ import ApplicationListItem from "./ApplicationListItem";
 
 interface ApplicationsListProps {
   applications: Application[];
-  handleDelete: (id: string) => void;
+  onApplicationDeleted: (id: string) => void;
 }
 
 export const ApplicationsList = ({
   applications,
-  handleDelete,
+  onApplicationDeleted,
 }: ApplicationsListProps) => {
   return (
     <Box
@@ -25,7 +25,7 @@ export const ApplicationsList = ({
         <ApplicationListItem
           key={app.id}
           application={app}
-          handleDelete={handleDelete}
+          handleDelete={onApplicationDeleted}
         />
       ))}
     </Box>

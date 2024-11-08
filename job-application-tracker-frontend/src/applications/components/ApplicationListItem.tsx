@@ -9,7 +9,7 @@ interface ApplicationListItemProps {
 
 const ApplicationListItem: React.FC<ApplicationListItemProps> = ({
   application,
-  handleDelete,
+  handleDelete: onDelete,
 }: ApplicationListItemProps) => {
   return (
     <mui.Box
@@ -30,7 +30,7 @@ const ApplicationListItem: React.FC<ApplicationListItemProps> = ({
       <mui.Button
         variant="contained"
         color="secondary"
-        onClick={() => handleDelete(application.id)}
+        onClick={() => onDelete(application.id)}
       >
         Delete
       </mui.Button>
