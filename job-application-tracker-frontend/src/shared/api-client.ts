@@ -1,5 +1,5 @@
 import axios from "axios";
-import usersService from "../users/users.service";
+import usersService from "../users/services/users.service";
 import { StatusCodes } from "http-status-codes";
 
 const API_URL = process.env.REACT_APP_BASE_API_URL;

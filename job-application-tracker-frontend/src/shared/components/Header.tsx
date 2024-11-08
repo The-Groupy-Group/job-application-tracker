@@ -1,7 +1,7 @@
 import { AppBar, Toolbar, Typography, Button } from "@mui/material";
-import usersService from "../users/users.service";
+import usersService from "../../users/services/users.service";
 import { useEffect, useState } from "react";
-import { TokenPayload } from "./jwt-payload";
+import { TokenPayload } from "../models/jwt-payload";
 
 const Header: React.FC = () => {
   return (
@@ -11,12 +11,12 @@ const Header: React.FC = () => {
           Job Application Tracker
         </Typography>
         <UserDetails />
-        <Button 
-            color="error" 
-            onClick={logOut}
-            variant="contained"
-            sx={{ mt: 3, mb: 2, ml: 4 }}
-            >
+        <Button
+          color="error"
+          onClick={logOut}
+          variant="contained"
+          sx={{ mt: 3, mb: 2, ml: 4 }}
+        >
           Log out
         </Button>
       </Toolbar>

@@ -1,10 +1,10 @@
 import "./App.css";
 import { BrowserRouter, Routes, Route } from "react-router-dom";
-import Login from "./users/Login";
-import ProtectedRoute from "./shared/ProtectedRoute ";
-import Register from "./users/Register";
-import { ApplicationsPage } from "./applications/ApplicationsPage";
-import Header from "./shared/Header";
+import Login from "./users/components/Login";
+import ProtectedRoute from "./shared/components/ProtectedRoute ";
+import Register from "./users/components/Register";
+import { ApplicationsPage } from "./applications/components/ApplicationsPage";
+import Header from "./shared/components/Header";
 
 function App() {
   return (

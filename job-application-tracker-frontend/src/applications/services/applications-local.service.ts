@@ -1,8 +1,9 @@
 import { ApplicationsService } from "./applications.service";
-import { Application } from "./models/application";
-import { CreateApplicationRequest } from "./models/create-application-request";
-import { UpdateApplicationRequest } from "./models/update-application-request";
+import { Application } from "../models/application";
+import { CreateApplicationRequest } from "../models/create-application-request";
+import { UpdateApplicationRequest } from "../models/update-application-request";
 
+// TODO: remove this class when the API is ready
 export class ApplicationsLocalService extends ApplicationsService {
   private applications: Application[];
   constructor() {
@@ -85,5 +86,3 @@ export class ApplicationsLocalService extends ApplicationsService {
     this.applications = this.applications.filter((app) => app.id !== id);
   }
 }
-
-export default new ApplicationsLocalService();

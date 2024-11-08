@@ -1,9 +1,7 @@
 import { useEffect, useState } from "react";
-import applicationsService from "./applications-local.service";
-import { Application } from "./models/application";
-import { Box, Typography, Container, CssBaseline } from "@mui/material";
-import { CreateApplicationRequest } from "./models/create-application-request";
-import { UpdateApplicationRequest } from "./models/update-application-request";
+import applicationsService from "../services/applications.service";
+import { Application } from "../models/application";
+import { Box } from "@mui/material";
 import ApplicationListItem from "./ApplicationListItem";
 
 export const ApplicationsList = () => {

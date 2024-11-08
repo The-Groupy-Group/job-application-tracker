@@ -1,6 +1,6 @@
 import * as mui from "@mui/material";
-import { Application } from "./models/application";
-import ApplicationState from "./models/application-state";
+import { Application } from "../models/application";
+import ApplicationState from "../models/application-state";
 
 interface ApplicationListItemProps {
   application: Application;

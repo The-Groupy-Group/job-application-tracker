@@ -10,7 +10,7 @@ import {
   Alert,
 } from "@mui/material";
 import { useNavigate } from "react-router-dom";
-import UsersService from "./users.service";
+import UsersService from "../services/users.service";
 
 const Login: React.FC = () => {
   const [email, setEmail] = useState("");
