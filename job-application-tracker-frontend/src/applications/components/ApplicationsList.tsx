@@ -4,21 +4,15 @@ import { Application } from "../models/application";
 import { Box } from "@mui/material";
 import ApplicationListItem from "./ApplicationListItem";
 
-export const ApplicationsList = () => {
-  const [applications, setApplications] = useState<Application[]>([]);
+interface ApplicationsListProps {
+  applications: Application[];
+  handleDelete: (id: string) => void;
+}
 
-  useEffect(() => {
-    applicationsService.getApplications().then((data) => {
-      setApplications(data);
-    });
-  }, []);
-
-  const handleDelete = (id: string) => {
-    applicationsService.deleteApplication(id).then(() => {
-      setApplications(applications.filter((app) => app.id !== id));
-    });
-  };
-
+export const ApplicationsList = ({
+  applications,
+  handleDelete,
+}: ApplicationsListProps) => {
   return (
     <Box
       sx={{

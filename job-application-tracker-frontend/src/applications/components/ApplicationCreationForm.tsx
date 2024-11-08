@@ -4,17 +4,22 @@ import {
   DialogContentText,
   Box,
   Button,
+  TextField,
 } from "@mui/material";
 import { useState } from "react";
 import applicationsService from "../services/applications.service";
 
+interface ApplicationCreationFormProps {
+  open: boolean;
+  handleClose: () => void;
+  onApplicationCreated: () => void;
+}
+
 const ApplicationCreationForm = ({
   open,
   handleClose,
-}: {
-  open: boolean;
-  handleClose: () => void;
-}) => {
+  onApplicationCreated,
+}: ApplicationCreationFormProps) => {
   const [companyName, setCompanyName] = useState("");
   const [position, setPosition] = useState("");
 
@@ -34,17 +39,26 @@ const ApplicationCreationForm = ({
             flexDirection: "column",
             alignItems: "center",
             padding: 2,
+            mt: 1,
           }}
         >
-          <input
+          <TextField
+            margin="normal"
+            required
+            fullWidth
             type="text"
             placeholder="Company Name"
+            id="companyName"
             value={companyName}
             onChange={(e) => setCompanyName(e.target.value)}
           />
-          <input
+          <TextField
+            margin="normal"
+            required
+            fullWidth
             type="text"
             placeholder="Position"
+            id="position"
             value={position}
             onChange={(e) => setPosition(e.target.value)}
           />
@@ -60,6 +74,7 @@ const ApplicationCreationForm = ({
                 .then(() => {
                   setCompanyName("");
                   setPosition("");
+                  onApplicationCreated();
                   handleClose();
                 });
             }}

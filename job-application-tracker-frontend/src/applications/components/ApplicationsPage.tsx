@@ -1,16 +1,39 @@
 import { Container, CssBaseline, Box, Typography, Button } from "@mui/material";
 import { ApplicationsList } from "./ApplicationsList";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import ApplicationCreationForm from "./ApplicationCreationForm";
+import { Application } from "../models/application";
+import applicationsService from "../services/applications.service";
 
 export const ApplicationsPage = () => {
+  const [applications, setApplications] = useState<Application[]>([]);
   const [applicationCreationOpen, setApplicationCreationOpen] = useState(false);
+
   const handleClose = () => {
     setApplicationCreationOpen(false);
   };
+
   const handleOpen = () => {
     setApplicationCreationOpen(true);
   };
+
+  const onApplicationCreated = () => {
+    applicationsService.getApplications().then((data) => {
+      setApplications(data);
+    });
+  };
+
+  const onApplicationDeleted = (id: string) => {
+    applicationsService.deleteApplication(id).then(() => {
+      setApplications(applications.filter((app) => app.id !== id));
+    });
+  };
+
+  useEffect(() => {
+    applicationsService.getApplications().then((data) => {
+      setApplications(data);
+    });
+  }, []);
 
   return (
     <>
@@ -36,13 +59,17 @@ export const ApplicationsPage = () => {
             Create Application
           </Button>
 
-          <ApplicationCreationForm
-            open={applicationCreationOpen}
-            handleClose={handleClose}
+          <ApplicationsList
+            applications={applications}
+            handleDelete={onApplicationDeleted}
           />
-          <ApplicationsList />
         </Box>
       </Container>
+      <ApplicationCreationForm
+        open={applicationCreationOpen}
+        handleClose={handleClose}
+        onApplicationCreated={onApplicationCreated}
+      />
     </>
   );
 };
