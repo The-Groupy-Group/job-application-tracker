@@ -10,7 +10,7 @@ import {
 
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
-import UsersService from "./users.service";
+import UsersService from "../services/users.service";
 
 const Register: React.FC = () => {
   const [userName, setUserName] = useState("");
@@ -71,6 +71,18 @@ const Register: React.FC = () => {
             margin="normal"
             required
             fullWidth
+            id="email"
+            label="Email Address"
+            name="email"
+            autoComplete="email"
+            autoFocus
+            value={email}
+            onChange={(e) => setEmail(e.target.value)}
+          />
+          <TextField
+            margin="normal"
+            required
+            fullWidth
             id="userName"
             label="User Name"
             name="userName"
@@ -102,18 +114,6 @@ const Register: React.FC = () => {
             autoFocus
             value={lastName}
             onChange={(e) => setLastName(e.target.value)}
-          />
-          <TextField
-            margin="normal"
-            required
-            fullWidth
-            id="email"
-            label="Email Address"
-            name="email"
-            autoComplete="email"
-            autoFocus
-            value={email}
-            onChange={(e) => setEmail(e.target.value)}
           />
           <TextField
             margin="normal"
