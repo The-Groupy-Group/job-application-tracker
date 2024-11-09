@@ -38,8 +38,7 @@ export const ApplicationsPage = () => {
 
   return (
     <>
-      <Container component="main" maxWidth="xs">
-        <CssBaseline />
+      <Container component="main">
         <Box
           sx={{
             marginTop: 8,
@@ -58,17 +57,18 @@ export const ApplicationsPage = () => {
           >
             Add Application
           </Button>
-          <ApplicationCreationForm
-            open={isApplicationCreationOpen}
-            onClose={handleCloseApplicationCreation}
-            onApplicationCreated={handleApplicationCreated}
-          />
+
           <ApplicationsList
             applications={applications}
             onApplicationDeleted={handleApplicationDeleted}
           />
         </Box>
       </Container>
+      <ApplicationCreationForm
+        open={isApplicationCreationOpen}
+        onClose={handleCloseApplicationCreation}
+        onApplicationCreated={handleApplicationCreated}
+      />
     </>
   );
 };

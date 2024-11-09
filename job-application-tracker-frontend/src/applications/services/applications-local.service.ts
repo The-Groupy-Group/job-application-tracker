@@ -2,6 +2,7 @@ import { ApplicationsService } from "./applications.service";
 import { Application } from "../models/application";
 import { CreateApplicationRequest } from "../models/create-application-request";
 import { UpdateApplicationRequest } from "../models/update-application-request";
+import ApplicationState from "../models/application-state";
 
 // TODO: remove this class when the API is ready
 export class ApplicationsLocalService extends ApplicationsService {
@@ -84,5 +85,27 @@ export class ApplicationsLocalService extends ApplicationsService {
 
   async deleteApplication(id: string): Promise<void> {
     this.applications = this.applications.filter((app) => app.id !== id);
+  }
+
+  async addApplicationState(
+    applicationId: string,
+    state: ApplicationState
+  ): Promise<Application> {
+    const application = this.applications.find((app) => app.id === applicationId);
+
+    if (!application) {
+      throw new Error("Application not found");
+    }
+
+    const updatedApplication = {
+      ...application,
+      currentState: state,
+    };
+
+    this.applications = this.applications.map((app) =>
+      app.id === applicationId ? updatedApplication : app
+    );
+
+    return updatedApplication;
   }
 }

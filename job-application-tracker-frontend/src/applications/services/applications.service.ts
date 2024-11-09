@@ -3,7 +3,7 @@ import apiClient from "../../shared/api-client";
 import { Application } from ".././models/application";
 import { CreateApplicationRequest } from ".././models/create-application-request";
 import { UpdateApplicationRequest } from ".././models/update-application-request";
-import { ApplicationsLocalService } from "./applications-local.service";
+import ApplicationState from "../models/application-state";
 
 export class ApplicationsService {
   constructor(private readonly apiClient: AxiosInstance) {}
@@ -32,12 +32,24 @@ export class ApplicationsService {
   async deleteApplication(id: string): Promise<void> {
     await this.apiClient.delete(`applications/${id}`);
   }
+
+  async addApplicationState(
+    applicationId: string,
+    state: ApplicationState
+  ): Promise<Application> {
+    return await this.apiClient.post(
+      `applications/${applicationId}/states`,
+      state
+    );
+  }
 }
 
 // TODO: remove this function and use the ApplicationsService class directly when the API is ready
 function createApplicationsService(): ApplicationsService {
   if (process.env.REACT_APP_LOCAL_APP_SERVICE === "true") {
-    const { ApplicationsLocalService } = require("./applications-local.service");
+    const {
+      ApplicationsLocalService,
+    } = require("./applications-local.service");
     return new ApplicationsLocalService();
   }
   return new ApplicationsService(apiClient);

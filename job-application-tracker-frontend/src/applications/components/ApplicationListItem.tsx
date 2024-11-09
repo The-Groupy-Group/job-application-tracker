@@ -1,4 +1,4 @@
-import { Box, Button, Typography } from "@mui/material";
+import { Box, Button, Container, Paper, Typography } from "@mui/material";
 import { Application } from "../models/application";
 import ApplicationState from "../models/application-state";
 import { useState } from "react";
@@ -25,40 +25,49 @@ const ApplicationListItem: React.FC<ApplicationListItemProps> = ({
   };
 
   return (
-    <Box
-      key={application.id}
-      sx={{
-        display: "flex",
-        flexDirection: "column",
-        alignItems: "center",
-        border: 1,
-        padding: 2,
-        margin: 2,
-      }}
-    >
-      <Typography variant="h6">{application.companyName}</Typography>
-      <Typography>{application.position}</Typography>
-      <ApplicationStateInfo state={application.currentState} />
-      <Button
-        variant="contained"
-        color="primary"
-        onClick={handleOpenApplicationCreation}
+    <>
+      <Paper
+        key={application.id}
+        sx={{
+          width: "90%",
+          display: "flex",
+          flexDirection: "column",
+          alignItems: "center",
+          padding: 2,
+          margin: 2,
+          border: 1,
+        }}
       >
-        Add State
-      </Button>
+        <Container sx={{ display: "flex", justifyContent: "space-between" }}>
+          <Typography variant="h6">
+            {application.position} - {application.companyName}
+          </Typography>
+          <Typography>{application.id}</Typography>
+        </Container>
+
+        <ApplicationStateInfo state={application.currentState} />
+        <Button
+          variant="contained"
+          color="primary"
+          onClick={handleOpenApplicationCreation}
+        >
+          Add State
+        </Button>
+        <Button
+          variant="contained"
+          color="secondary"
+          onClick={() => onDelete(application.id)}
+        >
+          Delete
+        </Button>
+      </Paper>
       <ApplicationStateForm
+        applicationId={application.id}
         open={isApplicationCreationOpen}
         onClose={handleCloseApplicationCreation}
         onApplicationStateAdded={() => {}}
       />
-      <Button
-        variant="contained"
-        color="secondary"
-        onClick={() => onDelete(application.id)}
-      >
-        Delete
-      </Button>
-    </Box>
+    </>
   );
 };
 
@@ -66,17 +75,18 @@ const ApplicationStateInfo: React.FC<{ state: ApplicationState }> = ({
   state,
 }) => {
   return (
-    <Box
+    <Paper
       sx={{
         display: "flex",
         flexDirection: "column",
         alignItems: "flex-start",
+        padding: 2,
       }}
     >
       <Typography>{state.title}</Typography>
       <Typography>{state.description}</Typography>
       <Typography>{state.dueDate.toDateString()}</Typography>
-    </Box>
+    </Paper>
   );
 };
 

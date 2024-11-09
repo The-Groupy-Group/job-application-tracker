@@ -16,17 +16,19 @@ export const ApplicationsList = ({
   return (
     <Box
       sx={{
-        display: "flex",
-        flexDirection: "column",
-        alignItems: "center",
+      display: "flex",
+      flexDirection: "column",
+      alignItems: "center",
+      border: 1,
+      width: "80%",
       }}
     >
       {applications.map((app) => (
-        <ApplicationListItem
-          key={app.id}
-          application={app}
-          onDelete={onApplicationDeleted}
-        />
+      <ApplicationListItem
+        key={app.id}
+        application={app}
+        onDelete={onApplicationDeleted}
+      />
       ))}
     </Box>
   );

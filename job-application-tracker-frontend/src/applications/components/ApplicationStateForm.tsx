@@ -8,14 +8,17 @@ import {
 } from "@mui/material";
 import { useState } from "react";
 import applicationsService from "../services/applications.service";
+import ApplicationState from "../models/application-state";
 
 interface ApplicationStateFormProps {
+  applicationId: string;
   open: boolean;
   onClose: () => void;
   onApplicationStateAdded: () => void;
 }
 
 const ApplicationStateForm = ({
+  applicationId,
   open,
   onClose: handleClose,
   onApplicationStateAdded: onApplicationCreated,
@@ -78,18 +81,23 @@ const ApplicationStateForm = ({
             variant="contained"
             color="primary"
             onClick={() => {
-              // applicationsService
-              //   .createApplication({
-              //     companyName,
-              //     position,
-              //   })
-              //   .then(() => {
-              //     setTitle("");
-              //     setDescription("");
-              //     setDueDate(new Date());
-              //     onApplicationCreated();
-              //     handleClose();
-              //   });
+              const state: ApplicationState = {
+                title,
+                description,
+                dueDate,
+              };
+              applicationsService
+                .addApplicationState(
+                  applicationId,
+                  state,
+                )
+                .then(() => {
+                  setTitle("");
+                  setDescription("");
+                  setDueDate(new Date());
+                  onApplicationCreated();
+                  handleClose();
+                });
             }}
           >
             Create
