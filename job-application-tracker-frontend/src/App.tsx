@@ -1,12 +1,10 @@
 import "./App.css";
-import { BrowserRouter, Routes, Route, useNavigate } from "react-router-dom";
-import Login from "./users/Login";
-import ProtectedRoute from "./shared/ProtectedRoute ";
-import usersService from "./users/users.service";
-import { useEffect, useState } from "react";
-import { TokenPayload } from "./shared/jwt-payload";
-import Register from "./users/Register";
-import { Button } from "@mui/material";
+import { BrowserRouter, Routes, Route } from "react-router-dom";
+import Login from "./users/components/Login";
+import ProtectedRoute from "./shared/components/ProtectedRoute ";
+import Register from "./users/components/Register";
+import { ApplicationsPage } from "./applications/components/ApplicationsPage";
+import Header from "./shared/components/Header";
 
 function App() {
   return (
@@ -33,33 +31,8 @@ function App() {
 function Home() {
   return (
     <>
-      home <br />
-      You are logged in as <UserDetails />
-      <Button
-        variant="contained"
-        color="primary"
-        onClick={() => {
-          usersService.logout();
-          window.location.reload();
-        }}
-      >
-        Log out
-      </Button>
-    </>
-  );
-}
-
-function UserDetails() {
-  const [payload, setPayload] = useState<TokenPayload>({} as TokenPayload);
-
-  useEffect(() => {
-    const user = usersService.getTokenPayload();
-    setPayload(user);
-  }, []);
-
-  return (
-    <>
-      Email: {payload.email} Id: {payload.sub}
+      <Header />
+      <ApplicationsPage />
     </>
   );
 }
