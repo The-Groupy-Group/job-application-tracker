@@ -54,6 +54,7 @@ export const ApplicationsPage = () => {
             variant="contained"
             color="primary"
             onClick={handleOpenApplicationCreation}
+            sx={{ margin: 2 }}
           >
             Add Application
           </Button>

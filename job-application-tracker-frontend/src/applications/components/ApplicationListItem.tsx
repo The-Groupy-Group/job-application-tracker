@@ -46,26 +46,36 @@ const ApplicationListItem: React.FC<ApplicationListItemProps> = ({
         </Container>
 
         <ApplicationStateInfo state={application.currentState} />
-        <Button
-          variant="contained"
-          color="primary"
-          onClick={handleOpenApplicationCreation}
+        <Box
+          sx={{
+            display: "flex",
+            justifyContent: "flex-start",
+            width: "100%",
+            marginTop: 2,
+          }}
         >
-          Add State
-        </Button>
-        <Button
-          variant="contained"
-          color="secondary"
-          onClick={() => onDelete(application.id)}
-        >
-          Delete
-        </Button>
+          <Button
+            variant="contained"
+            color="primary"
+            onClick={handleOpenApplicationCreation}
+            sx={{ marginRight: 1 }}
+          >
+            Add State
+          </Button>
+          <Button
+            variant="contained"
+            color="secondary"
+            onClick={() => onDelete(application.id)}
+          >
+            Delete
+          </Button>
+        </Box>
       </Paper>
       <ApplicationStateForm
         applicationId={application.id}
         open={isApplicationCreationOpen}
         onClose={handleCloseApplicationCreation}
-        onApplicationStateAdded={() => {}}
+        onApplicationStateAdded={(state) => {application.currentState = state}}
       />
     </>
   );
@@ -81,11 +91,14 @@ const ApplicationStateInfo: React.FC<{ state: ApplicationState }> = ({
         flexDirection: "column",
         alignItems: "flex-start",
         padding: 2,
+        width: "95%",
       }}
     >
-      <Typography>{state.title}</Typography>
-      <Typography>{state.description}</Typography>
-      <Typography>{state.dueDate.toDateString()}</Typography>
+      <Container sx={{ display: "flex", justifyContent: "space-between" }}>
+        <Typography variant="h6">{state.title}</Typography>
+        <Typography>{state.dueDate.toDateString()}</Typography>
+      </Container>
+      <Typography sx={{ alignSelf: "center" }}>{state.description}</Typography>
     </Paper>
   );
 };

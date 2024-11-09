@@ -14,26 +14,24 @@ interface ApplicationStateFormProps {
   applicationId: string;
   open: boolean;
   onClose: () => void;
-  onApplicationStateAdded: () => void;
+  onApplicationStateAdded: (state: ApplicationState) => void;
 }
 
 const ApplicationStateForm = ({
   applicationId,
   open,
-  onClose: handleClose,
-  onApplicationStateAdded: onApplicationCreated,
+  onClose,
+  onApplicationStateAdded,
 }: ApplicationStateFormProps) => {
   const [title, setTitle] = useState("");
   const [description, setDescription] = useState("");
   const [dueDate, setDueDate] = useState(new Date());
 
-  let applicationCreationR;
-
   return (
     <Dialog
       sx={(theme) => ({ color: "#fff", zIndex: theme.zIndex.drawer + 1 })}
       open={open}
-      onClose={handleClose}
+      onClose={onClose}
     >
       <DialogTitle component="h1" variant="h5">
         Add State
@@ -87,16 +85,13 @@ const ApplicationStateForm = ({
                 dueDate,
               };
               applicationsService
-                .addApplicationState(
-                  applicationId,
-                  state,
-                )
+                .addApplicationState(applicationId, state)
                 .then(() => {
                   setTitle("");
                   setDescription("");
                   setDueDate(new Date());
-                  onApplicationCreated();
-                  handleClose();
+                  onApplicationStateAdded(state);
+                  onClose();
                 });
             }}
           >
