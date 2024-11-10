@@ -1,4 +1,4 @@
-import { BadRequestException, Body, Controller, Delete, Get, Param, Post, Put, Request, UseGuards, ValidationPipe } from '@nestjs/common';
+import { Body, Controller, Delete, Get, NotFoundException, Param, Post, Put, Request, UseGuards, ValidationPipe } from '@nestjs/common';
 import { ApiCreatedResponse, ApiOkResponse, ApiOperation, ApiTags } from '@nestjs/swagger';
 import { ApplicationsService } from './applications.service';
 import { AuthGuard } from 'src/shared/guards/auth.guard';
@@ -32,7 +32,7 @@ export class ApplicationsController {
     async findOne(@Request() request: ApiRequest, @Param('id') id: string) {
         const appFound= await this.applicationService.findOne(id);
         if (!request.jwtPayLoad.roles.includes(Role.admin)&&(request.jwtPayLoad.sub !== appFound.userId)) {
-            throw new BadRequestException('you are not allowed to do this');
+            throw new NotFoundException();
         }
         return appFound;
     }
@@ -45,11 +45,7 @@ export class ApplicationsController {
     })
     async create(@Request() request: ApiRequest,
         @Body(ValidationPipe) createApplicationDto: CreateApplicationDto) {
-        if (!request.jwtPayLoad.roles.includes(Role.admin) &&
-            request.jwtPayLoad.sub !== createApplicationDto.userId) {
-            throw new BadRequestException('Not Found');
-        }
-        return await this.applicationService.create(createApplicationDto);
+        return await this.applicationService.create(createApplicationDto,request.jwtPayLoad.sub);
     }
 
     @Put(':id')
@@ -64,7 +60,7 @@ export class ApplicationsController {
     ) {
         const userId=(await this.applicationService.findOne(updateApplicationDto.id)).userId;
         if (request.jwtPayLoad.sub!==userId &&!request.jwtPayLoad.roles.includes(Role.admin)) {
-            throw new BadRequestException('Not Found');
+            throw new NotFoundException();
         }
         return await this.applicationService.update(id, updateApplicationDto);
     }
@@ -79,7 +75,7 @@ export class ApplicationsController {
         @Param('id') id: string) {
         const userId = (await this.applicationService.findOne(id)).userId;
         if (!request.jwtPayLoad.roles.includes(Role.admin) && request.jwtPayLoad.sub !== userId) {
-            throw new BadRequestException('you are not allowed to delete this user');
+            throw new NotFoundException();
         }
         return await this.applicationService.delete(id);
     }

@@ -10,11 +10,7 @@ export class CreateApplicationDto {
 
     @IsString()
     @IsNotEmpty()
-    @ApiProperty({ example: 'coffe maker' })
+    @ApiProperty({ example: 'coffee maker' })
     position: string;
 
-    @IsString()
-    @IsNotEmpty()
-    @ApiProperty({ example: '12345' })
-    userId: string;
 }
