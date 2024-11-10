@@ -9,24 +9,28 @@ export class ApplicationsService {
   constructor(private readonly apiClient: AxiosInstance) {}
 
   async getApplications(): Promise<Application[]> {
-    return await this.apiClient.get(`applications`);
+   const response = await this.apiClient.get("applications");
+    return response.data;
   }
 
   async getApplication(id: string): Promise<Application> {
-    return await this.apiClient.get(`applications/${id}`);
+    const response = await this.apiClient.get(`applications/${id}`);
+    return response.data;
   }
 
   async createApplication(
     request: CreateApplicationRequest
   ): Promise<Application> {
-    return await this.apiClient.post(`applications`, request);
+    const response = await this.apiClient.post("applications", request);
+    return response.data;
   }
 
   async updateApplication(
     id: string,
     request: UpdateApplicationRequest
   ): Promise<Application> {
-    return await this.apiClient.put(`applications/${id}`, request);
+    const response = await this.apiClient.put(`applications/${id}`, request);
+    return response.data;
   }
 
   async deleteApplication(id: string): Promise<void> {
@@ -44,17 +48,18 @@ export class ApplicationsService {
   }
 }
 
-// TODO: remove this function and use the ApplicationsService class directly when the API is ready
-function createApplicationsService(): ApplicationsService {
-  if (process.env.REACT_APP_LOCAL_APP_SERVICE === "true") {
-    const {
-      ApplicationsLocalService,
-    } = require("./applications-local.service");
-    return new ApplicationsLocalService();
-  }
-  return new ApplicationsService(apiClient);
-}
+// function createApplicationsService(): ApplicationsService {
+//   if (process.env.REACT_APP_LOCAL_APP_SERVICE === "true") {
+//     const {
+//       ApplicationsLocalService,
+//     } = require("./applications-local.service");
+//     return new ApplicationsLocalService();
+//   }
+//   return new ApplicationsService(apiClient);
+// }
 
-const applicationsService = createApplicationsService();
+// const applicationsService = createApplicationsService();
 
-export default applicationsService;
+// export default applicationsService;
+
+export default new ApplicationsService(apiClient);

@@ -11,7 +11,7 @@ export class ApplicationsLocalService extends ApplicationsService {
     super(null!);
     this.applications = [
       {
-        id: "1",
+        _id: "1",
         companyName: "Google",
         position: "Software Engineer",
         userId: "1",
@@ -22,7 +22,7 @@ export class ApplicationsLocalService extends ApplicationsService {
         },
       },
       {
-        id: "2",
+        _id: "2",
         companyName: "Facebook",
         position: "Product Manager",
         userId: "1",
@@ -39,7 +39,7 @@ export class ApplicationsLocalService extends ApplicationsService {
   }
 
   async getApplication(id: string): Promise<Application> {
-    return this.applications.find((app) => app.id === id)!;
+    return this.applications.find((app) => app._id === id)!;
   }
 
   async createApplication(
@@ -47,7 +47,7 @@ export class ApplicationsLocalService extends ApplicationsService {
   ): Promise<Application> {
     const newApplication: Application = {
       ...request,
-      id: Math.random().toString(36).substr(2, 9),
+      _id: Math.random().toString(36).substr(2, 9),
       userId: "1",
       currentState: {
         title: "Applied",
@@ -65,7 +65,7 @@ export class ApplicationsLocalService extends ApplicationsService {
     id: string,
     request: UpdateApplicationRequest
   ): Promise<Application> {
-    const application = this.applications.find((app) => app.id === id);
+    const application = this.applications.find((app) => app._id === id);
 
     if (!application) {
       throw new Error("Application not found");
@@ -77,21 +77,23 @@ export class ApplicationsLocalService extends ApplicationsService {
     };
 
     this.applications = this.applications.map((app) =>
-      app.id === id ? updatedApplication : app
+      app._id === id ? updatedApplication : app
     );
 
     return updatedApplication;
   }
 
   async deleteApplication(id: string): Promise<void> {
-    this.applications = this.applications.filter((app) => app.id !== id);
+    this.applications = this.applications.filter((app) => app._id !== id);
   }
 
   async addApplicationState(
     applicationId: string,
     state: ApplicationState
   ): Promise<Application> {
-    const application = this.applications.find((app) => app.id === applicationId);
+    const application = this.applications.find(
+      (app) => app._id === applicationId
+    );
 
     if (!application) {
       throw new Error("Application not found");
@@ -103,7 +105,7 @@ export class ApplicationsLocalService extends ApplicationsService {
     };
 
     this.applications = this.applications.map((app) =>
-      app.id === applicationId ? updatedApplication : app
+      app._id === applicationId ? updatedApplication : app
     );
 
     return updatedApplication;

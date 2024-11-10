@@ -27,7 +27,7 @@ const ApplicationListItem: React.FC<ApplicationListItemProps> = ({
   return (
     <>
       <Paper
-        key={application.id}
+        key={application._id}
         sx={{
           width: "90%",
           display: "flex",
@@ -42,7 +42,7 @@ const ApplicationListItem: React.FC<ApplicationListItemProps> = ({
           <Typography variant="h6">
             {application.position} - {application.companyName}
           </Typography>
-          <Typography>{application.id}</Typography>
+          <Typography>{application._id}</Typography>
         </Container>
 
         <ApplicationStateInfo state={application.currentState} />
@@ -65,17 +65,19 @@ const ApplicationListItem: React.FC<ApplicationListItemProps> = ({
           <Button
             variant="contained"
             color="secondary"
-            onClick={() => onDelete(application.id)}
+            onClick={() => onDelete(application._id)}
           >
             Delete
           </Button>
         </Box>
       </Paper>
       <ApplicationStateForm
-        applicationId={application.id}
+        applicationId={application._id}
         open={isApplicationCreationOpen}
         onClose={handleCloseApplicationCreation}
-        onApplicationStateAdded={(state) => {application.currentState = state}}
+        onApplicationStateAdded={(state) => {
+          application.currentState = state;
+        }}
       />
     </>
   );
