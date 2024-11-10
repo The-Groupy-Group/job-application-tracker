@@ -31,7 +31,7 @@ export class UsersService {
     }
 
     async create(createUserDto: CreateUserDto) {
-        if (this.userRepository.findByEmail(createUserDto.email)) {
+        if (await this.userRepository.findByEmail(createUserDto.email)) {
             throw new BadRequestException('this email is being used by a different user');
         }
         const passwordHash = await hash(createUserDto.password, 10);

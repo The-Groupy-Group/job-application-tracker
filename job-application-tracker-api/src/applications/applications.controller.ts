@@ -30,11 +30,8 @@ export class ApplicationsController {
         type: ApplicationDto
     })
     async findOne(@Request() request: ApiRequest, @Param('id') id: string) {
-        if (!request.jwtPayLoad.roles.includes(Role.admin)) {
-            throw new BadRequestException('you are not allowed to do this');
-        }
         const appFound= await this.applicationService.findOne(id);
-        if(request.jwtPayLoad.sub !== appFound.userId){
+        if (!request.jwtPayLoad.roles.includes(Role.admin)&&(request.jwtPayLoad.sub !== appFound.userId)) {
             throw new BadRequestException('you are not allowed to do this');
         }
         return appFound;
