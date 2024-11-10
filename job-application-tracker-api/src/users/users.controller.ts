@@ -1,6 +1,6 @@
 import {
     Body, Controller, Delete, Get, Param, Post,
-    ParseIntPipe, ValidationPipe,
+    ValidationPipe,
     Put, UseGuards, Request,
     BadRequestException
 } from '@nestjs/common';
@@ -12,7 +12,7 @@ import { LoginResponse } from './dto/login-response.dto';
 import { AuthGuard } from '../shared/guards/auth.guard';
 import { ApiRequest } from 'src/shared/api-request';
 import { Role } from 'src/shared/role';
-import { ApiBadRequestResponse, ApiBearerAuth, ApiBody, ApiCreatedResponse, ApiNotFoundResponse, ApiOkResponse, ApiOperation, ApiResponse, ApiTags, ApiUnauthorizedResponse } from '@nestjs/swagger';
+import { ApiBadRequestResponse, ApiCreatedResponse, ApiNotFoundResponse, ApiOkResponse, ApiOperation, ApiResponse, ApiTags, ApiUnauthorizedResponse } from '@nestjs/swagger';
 import { UserDto } from './dto/user.dto';
 
 @ApiTags('api/users')
@@ -34,7 +34,7 @@ export class UsersController {
         if (!request.jwtPayLoad.roles.includes(Role.admin)) {
             throw new BadRequestException('only admin can get all users');
         }
-        return this.usersService.findALL();
+        return await this.usersService.findALL();
     }
 
 
@@ -51,7 +51,7 @@ export class UsersController {
         if (!request.jwtPayLoad.roles.includes(Role.admin) && request.jwtPayLoad.sub !== id) {
             throw new BadRequestException('you are not allowed to get this user');
         }
-        return this.usersService.findOne(id);
+        return await this.usersService.findOne(id);
     }
 
 
@@ -63,7 +63,7 @@ export class UsersController {
     })
     @ApiBadRequestResponse()
     async create(@Body(ValidationPipe) createUserDto: CreateUserDto) {
-        return this.usersService.create(createUserDto);
+        return await this.usersService.create(createUserDto);
     }
 
 
@@ -99,7 +99,7 @@ export class UsersController {
         if (request.jwtPayLoad.sub !== id && !request.jwtPayLoad.roles.includes(Role.admin)) {
             throw new BadRequestException('id doesnt match');
         }
-        return this.usersService.update(id, updateUserDto);
+        return await this.usersService.update(id, updateUserDto);
     }
 
 
@@ -117,7 +117,7 @@ export class UsersController {
         if (!request.jwtPayLoad.roles.includes(Role.admin) && request.jwtPayLoad.sub !== id) {
             throw new BadRequestException('you are not allowed to delete this user');
         }
-        return this.usersService.delete(id);
+        return await this.usersService.delete(id);
     }
 
 }

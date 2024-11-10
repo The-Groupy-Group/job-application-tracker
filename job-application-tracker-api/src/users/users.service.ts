@@ -4,7 +4,6 @@ import { UpdateUserDto } from './dto/update-user.dto';
 import { NotFoundException } from '@nestjs/common';
 import { LoginDto } from './dto/login.dto';
 import { compare, hash } from 'bcrypt';
-import { User } from './models/user.model';
 import { JwtService } from '@nestjs/jwt';
 import { LoginResponse } from './dto/login-response.dto';
 import { JwtPayLoad } from 'src/shared/jwt-payload';
@@ -32,7 +31,7 @@ export class UsersService {
     }
 
     async create(createUserDto: CreateUserDto) {
-        if(await this.userRepository.findByEmail(createUserDto.email)){
+        if (await this.userRepository.findByEmail(createUserDto.email)) {
             throw new BadRequestException('this email is being used by a different user');
         }
         const passwordHash = await hash(createUserDto.password, 10);
@@ -50,8 +49,8 @@ export class UsersService {
         return UserMapper.toUserDto(savedUser);
     }
 
-    async update(id: string, updateUserDto: UpdateUserDto) {
-        const user = await this.userRepository.findById(id);
+    async update(userId: string, updateUserDto: UpdateUserDto) {
+        const user = await this.userRepository.findById(userId);
         if (!user) {
             throw new NotFoundException('User not found');
         }
@@ -59,15 +58,15 @@ export class UsersService {
         user.firstName = updateUserDto.firstName;
         user.lastName = updateUserDto.lastName;
         user.email = updateUserDto.email;
-        let emailUser=this.userRepository.findByEmail(user.email);
-        if(emailUser){
-            if((await emailUser)._id !== id)
+        const emailUser = this.userRepository.findByEmail(user.email);
+        if (emailUser) {
+            if ((await emailUser)._id !== userId)
                 throw new BadRequestException('this email is being used by a different user');
         }
         if (updateUserDto.password) {
             user.passwordHash = await hash(updateUserDto.password, 10);
         }
-        const updatedUser = await this.userRepository.update(id,user);
+        const updatedUser = await this.userRepository.update(userId, user);
         return UserMapper.toUserDto(updatedUser);
     }
 
@@ -98,7 +97,7 @@ export class UsersService {
             roles: user.roles
         };
         const accessToken = await this.jwtService.signAsync(tokenPayLoad);
-        let id: string = user._id;
+        const id: string = user._id;
         return new LoginResponse(id, accessToken);
 
     }

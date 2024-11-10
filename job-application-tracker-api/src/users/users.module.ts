@@ -24,6 +24,7 @@ import { UserRepository } from './user.repository';
             secret: process.env.JWT_SECRET,
             signOptions: { expiresIn: '1h' },
         }),
-        ]
+        ],
+        exports:[UsersService]
 })
 export class UsersModule { }
