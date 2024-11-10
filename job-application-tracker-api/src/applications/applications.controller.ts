@@ -50,7 +50,7 @@ export class ApplicationsController {
         @Body(ValidationPipe) createApplicationDto: CreateApplicationDto) {
         if (!request.jwtPayLoad.roles.includes(Role.admin) &&
             request.jwtPayLoad.sub !== createApplicationDto.userId) {
-            throw new BadRequestException('user id doesnt match');
+            throw new BadRequestException('Not Found');
         }
         return await this.applicationService.create(createApplicationDto);
     }

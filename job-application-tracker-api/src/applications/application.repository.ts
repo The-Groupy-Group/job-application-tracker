@@ -8,7 +8,7 @@ export class ApplicationRepository {
   constructor(@InjectModel(Application.name) private applicationModel: Model<Application>) { }
 
   async create(application: Partial<Application>): Promise<Application> {
-    const newUser = new this.applicationModel({application,states:[]});
+    const newUser = new this.applicationModel(application);
     return newUser.save();
   }
 

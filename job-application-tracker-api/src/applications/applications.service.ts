@@ -29,13 +29,19 @@ export class ApplicationsService {
 
     async create(createApplicationDto: CreateApplicationDto) {
         try {
-            this.userService.findOne(createApplicationDto.userId);
+            await this.userService.findOne(createApplicationDto.userId);
         }
         catch {
             throw new NotFoundException('no such user');
         }
 
-        const savedApplication = await this.applicationRepository.create(createApplicationDto);
+        const newApplication={
+            companyName: createApplicationDto.companyName,
+            position: createApplicationDto.position,
+            states:["created"],
+            userId:createApplicationDto.userId
+        }
+        const savedApplication = await this.applicationRepository.create(newApplication);
         return ApplicationMapper.toApplicationDto(savedApplication);
 
     }
