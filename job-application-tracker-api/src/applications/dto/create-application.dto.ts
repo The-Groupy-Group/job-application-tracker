@@ -13,9 +13,6 @@ export class CreateApplicationDto {
     @ApiProperty({ example: 'coffe maker' })
     position: string;
 
-    @ApiProperty()
-    states: any[];
-
     @IsString()
     @IsNotEmpty()
     @ApiProperty({ example: '12345' })

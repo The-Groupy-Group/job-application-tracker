@@ -35,14 +35,7 @@ export class ApplicationsService {
             throw new NotFoundException('no such user');
         }
 
-        const newApplication : CreateApplicationDto = {
-            companyName: createApplicationDto.companyName,
-            position: createApplicationDto.position,
-            states: createApplicationDto.states,
-            userId: createApplicationDto.userId
-        };
-
-        const savedApplication = await this.applicationRepository.create(newApplication);
+        const savedApplication = await this.applicationRepository.create(createApplicationDto);
         return ApplicationMapper.toApplicationDto(savedApplication);
 
     }
@@ -51,8 +44,6 @@ export class ApplicationsService {
         if (!application) throw new NotFoundException('no such application');
         application.companyName = updateApplicationDto.companyName;
         application.position = updateApplicationDto.position;
-        application.states = updateApplicationDto.states;
-        if (updateApplicationDto.userId && (updateApplicationDto.userId !== application.userId)) throw new BadRequestException('cant change user ownership of application');
         const updateApplication = await this.applicationRepository.update(id, application);
         return ApplicationMapper.toApplicationDto(updateApplication);
     }

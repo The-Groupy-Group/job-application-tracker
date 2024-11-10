@@ -49,8 +49,8 @@ export class UsersService {
         return UserMapper.toUserDto(savedUser);
     }
 
-    async update(applicationId: string, updateUserDto: UpdateUserDto) {
-        const user = await this.userRepository.findById(applicationId);
+    async update(userId: string, updateUserDto: UpdateUserDto) {
+        const user = await this.userRepository.findById(userId);
         if (!user) {
             throw new NotFoundException('User not found');
         }
@@ -60,13 +60,13 @@ export class UsersService {
         user.email = updateUserDto.email;
         const emailUser = this.userRepository.findByEmail(user.email);
         if (emailUser) {
-            if ((await emailUser)._id !== applicationId)
+            if ((await emailUser)._id !== userId)
                 throw new BadRequestException('this email is being used by a different user');
         }
         if (updateUserDto.password) {
             user.passwordHash = await hash(updateUserDto.password, 10);
         }
-        const updatedUser = await this.userRepository.update(applicationId, user);
+        const updatedUser = await this.userRepository.update(userId, user);
         return UserMapper.toUserDto(updatedUser);
     }
 

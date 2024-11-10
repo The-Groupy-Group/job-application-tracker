@@ -21,7 +21,6 @@ export class ApplicationsController {
         type: [ApplicationDto]
     })
     async findAllUserApplications(@Request() request: ApiRequest) {
-        if (!request.jwtPayLoad.roles.includes(Role.admin)) throw new BadRequestException('you are not allowed to get this user');
         return await this.applicationService.findAllUserApplications(request.jwtPayLoad.sub);
     }
 
@@ -31,10 +30,14 @@ export class ApplicationsController {
         type: ApplicationDto
     })
     async findOne(@Request() request: ApiRequest, @Param('id') id: string) {
-        if (!request.jwtPayLoad.roles.includes(Role.admin) && request.jwtPayLoad.sub !== id) {
+        if (!request.jwtPayLoad.roles.includes(Role.admin)) {
             throw new BadRequestException('you are not allowed to do this');
         }
-        return await this.applicationService.findOne(id);
+        const appFound= await this.applicationService.findOne(id);
+        if(request.jwtPayLoad.sub !== appFound.userId){
+            throw new BadRequestException('you are not allowed to do this');
+        }
+        return appFound;
     }
 
     @Post()
@@ -62,8 +65,9 @@ export class ApplicationsController {
         @Param('id') id: string,
         @Body(ValidationPipe) updateApplicationDto: UpdateApplicationDto
     ) {
-        if (request.jwtPayLoad.sub !== updateApplicationDto.userId && !request.jwtPayLoad.roles.includes(Role.admin)) {
-            throw new BadRequestException('id doesnt match');
+        const userId=(await this.applicationService.findOne(updateApplicationDto.id)).userId;
+        if (request.jwtPayLoad.sub!==userId &&!request.jwtPayLoad.roles.includes(Role.admin)) {
+            throw new BadRequestException('Not Found');
         }
         return await this.applicationService.update(id, updateApplicationDto);
     }

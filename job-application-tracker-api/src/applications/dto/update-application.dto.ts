@@ -16,12 +16,4 @@ export class UpdateApplicationDto{
     @IsNotEmpty()
     @ApiProperty()
     position: string;
-
-    @ApiProperty()
-    states: any[];
-
-    @IsString()
-    @IsNotEmpty()
-    @ApiProperty()
-    userId?: string;
 }
