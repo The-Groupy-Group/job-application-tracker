@@ -1,5 +1,5 @@
 import { Schema, Prop, SchemaFactory } from "@nestjs/mongoose";
-import { ApplicationState } from "../applications-states/application-state.model";
+import { ApplicationState } from "../applications-states/model/application-state.model";
 
 @Schema()
 export class Application  {

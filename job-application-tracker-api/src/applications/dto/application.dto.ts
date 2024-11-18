@@ -1,5 +1,5 @@
 import { ApiProperty } from '@nestjs/swagger';
-import { ApplicationState } from "../applications-states/application-state.model";
+import { ApplicationState } from "../applications-states/model/application-state.model";
 
 
 export class ApplicationDto {

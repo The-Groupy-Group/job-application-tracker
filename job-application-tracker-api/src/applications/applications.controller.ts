@@ -7,7 +7,7 @@ import { ApiRequest } from 'src/shared/api-request';
 import { Role } from 'src/shared/role';
 import { CreateApplicationDto } from './dto/create-application.dto';
 import { UpdateApplicationDto } from './dto/update-application.dto';
-import { ApplicationState } from './applications-states/application-state.model';
+import { CreateStateDto } from './applications-states/dto/create-state.dto';
 
 @ApiTags('api/applications')
 @UseGuards(AuthGuard)
@@ -57,7 +57,7 @@ export class ApplicationsController {
     })
     async createState(@Request() request: ApiRequest,
         @Param('id') id: string,
-        @Body() newState: ApplicationState
+        @Body() newState: CreateStateDto
     ) {
         return await this.applicationService.createState(id, newState, request.jwtPayLoad.sub);
     }

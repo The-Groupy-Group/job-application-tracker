@@ -4,7 +4,7 @@ import { UsersService } from 'src/users/users.service';
 import { ApplicationMapper } from './application-mapper';
 import { CreateApplicationDto } from './dto/create-application.dto';
 import { UpdateApplicationDto } from './dto/update-application.dto';
-import { ApplicationState } from './applications-states/application-state.model';
+import { ApplicationState } from './applications-states/model/application-state.model';
 import { Application } from './models/application.model';
 
 @Injectable()
