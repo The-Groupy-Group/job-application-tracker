@@ -7,6 +7,7 @@ import { ApiRequest } from 'src/shared/api-request';
 import { Role } from 'src/shared/role';
 import { CreateApplicationDto } from './dto/create-application.dto';
 import { UpdateApplicationDto } from './dto/update-application.dto';
+import { ApplicationState } from './applications-states/application-state.model';
 
 @ApiTags('api/applications')
 @UseGuards(AuthGuard)
@@ -30,8 +31,8 @@ export class ApplicationsController {
         type: ApplicationDto
     })
     async findOne(@Request() request: ApiRequest, @Param('id') id: string) {
-        const appFound= await this.applicationService.findOne(id);
-        if (!request.jwtPayLoad.roles.includes(Role.admin)&&(request.jwtPayLoad.sub !== appFound.userId)) {
+        const appFound = await this.applicationService.findOne(id);
+        if (!request.jwtPayLoad.roles.includes(Role.admin) && (request.jwtPayLoad.sub !== appFound.userId)) {
             throw new NotFoundException();
         }
         return appFound;
@@ -45,7 +46,20 @@ export class ApplicationsController {
     })
     async create(@Request() request: ApiRequest,
         @Body(ValidationPipe) createApplicationDto: CreateApplicationDto) {
-        return await this.applicationService.create(createApplicationDto,request.jwtPayLoad.sub);
+        return await this.applicationService.create(createApplicationDto, request.jwtPayLoad.sub);
+    }
+
+    @Post(':id')
+    @ApiOperation({ summary: 'add new state ' })
+    @ApiCreatedResponse({
+        description: 'applicationDto',
+        type: ApplicationDto
+    })
+    async createState(@Request() request: ApiRequest,
+        @Param('id') id: string,
+        @Body() newState: ApplicationState
+    ) {
+        return await this.applicationService.createState(id, newState, request.jwtPayLoad.sub);
     }
 
     @Put(':id')
@@ -58,11 +72,7 @@ export class ApplicationsController {
         @Param('id') id: string,
         @Body(ValidationPipe) updateApplicationDto: UpdateApplicationDto
     ) {
-        const userId=(await this.applicationService.findOne(updateApplicationDto.id)).userId;
-        if (request.jwtPayLoad.sub!==userId &&!request.jwtPayLoad.roles.includes(Role.admin)) {
-            throw new NotFoundException();
-        }
-        return await this.applicationService.update(id, updateApplicationDto);
+        return await this.applicationService.update(id, updateApplicationDto, request.jwtPayLoad.sub);
     }
 
     @Delete(':id')

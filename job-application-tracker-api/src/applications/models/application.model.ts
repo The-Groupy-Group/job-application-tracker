@@ -1,4 +1,5 @@
 import { Schema, Prop, SchemaFactory } from "@nestjs/mongoose";
+import { ApplicationState } from "../applications-states/application-state.model";
 
 @Schema()
 export class Application  {
@@ -11,7 +12,7 @@ export class Application  {
     position: string;
 
     @Prop({required:true})
-    states: any[];
+    states: ApplicationState[];
 
     @Prop({required:true})
     userId: string;
