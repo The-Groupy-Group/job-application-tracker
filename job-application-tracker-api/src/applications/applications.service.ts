@@ -29,7 +29,7 @@ export class ApplicationsService {
         return ApplicationMapper.toApplicationDto(application);
     }
 
-    async create(createApplicationDto: CreateApplicationDto,userId : string) {
+    async create(createApplicationDto: CreateApplicationDto, userId: string) {
         try {
             await this.userService.findOne(userId);
         }
@@ -37,24 +37,24 @@ export class ApplicationsService {
             throw new NotFoundException('no such user');
         }
 
-        const newApplication={
+        const newApplication = {
             companyName: createApplicationDto.companyName,
             position: createApplicationDto.position,
-            states:[{
+            states: [{
                 title: "Applied",
                 description: "You have applied to this position",
                 dueDate: new Date(),
-              }],
-            userId:userId
+            }],
+            userId: userId
         }
-        
+
         const savedApplication = await this.applicationRepository.create(newApplication);
         return ApplicationMapper.toApplicationDto(savedApplication);
 
     }
-    async update(id: string, updateApplicationDto: UpdateApplicationDto, userId:string) {
+    async update(id: string, updateApplicationDto: UpdateApplicationDto, userId: string, isAdmin: Boolean) {
         const application = await this.applicationRepository.findById(id);
-        if (!application || (application.userId !== userId)) throw new NotFoundException('no such application');
+        if (!application || !((application.userId !== userId) || isAdmin)) throw new NotFoundException('no such application');
         application.companyName = updateApplicationDto.companyName;
         application.position = updateApplicationDto.position;
         const updateApplication = await this.applicationRepository.update(id, application);
@@ -67,19 +67,13 @@ export class ApplicationsService {
         return ApplicationMapper.toApplicationDto(deletedApplication);
     }
 
-    async createState(appId:string,newState:ApplicationState, userId: string){
+    async createState(appId: string, newState: ApplicationState, userId: string) {
         const application: Application = await this.applicationRepository.findById(appId);
-        if(!application || application.userId!==userId){
+        if (!application || application.userId !== userId) {
             throw new NotFoundException('no such application');
         }
         application.states.push(newState);
-        const updatedApplication={
-            companyName: application.companyName,
-            position: application.position,
-            states:application.states,
-            userId:userId
-        };
-        const updateApplication = await this.applicationRepository.update(appId, updatedApplication);
+        const updateApplication = await this.applicationRepository.update(appId, application);
         return ApplicationMapper.toApplicationDto(updateApplication);
     }
 }

@@ -49,14 +49,14 @@ export class ApplicationsController {
         return await this.applicationService.create(createApplicationDto, request.jwtPayLoad.sub);
     }
 
-    @Post(':id')
+    @Post(':applicationId/states')
     @ApiOperation({ summary: 'add new state ' })
     @ApiCreatedResponse({
         description: 'applicationDto',
         type: ApplicationDto
     })
     async createState(@Request() request: ApiRequest,
-        @Param('id') id: string,
+        @Param('applicationId') id: string,
         @Body() newState: CreateStateDto
     ) {
         return await this.applicationService.createState(id, newState, request.jwtPayLoad.sub);
@@ -72,7 +72,11 @@ export class ApplicationsController {
         @Param('id') id: string,
         @Body(ValidationPipe) updateApplicationDto: UpdateApplicationDto
     ) {
-        return await this.applicationService.update(id, updateApplicationDto, request.jwtPayLoad.sub);
+        let isAdmin: Boolean = false;
+        if (request.jwtPayLoad.roles.includes(Role.admin)) {
+            isAdmin = true;
+        }
+        return await this.applicationService.update(id, updateApplicationDto, request.jwtPayLoad.sub, isAdmin);
     }
 
     @Delete(':id')
