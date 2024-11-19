@@ -56,10 +56,10 @@ export class ApplicationsController {
         type: ApplicationDto
     })
     async createState(@Request() request: ApiRequest,
-        @Param('applicationId') id: string,
+        @Param('applicationId') applicationId: string,
         @Body() newState: CreateStateDto
     ) {
-        return await this.applicationService.createState(id, newState, request.jwtPayLoad.sub);
+        return await this.applicationService.createState(applicationId, newState, request.jwtPayLoad.sub);
     }
 
     @Put(':id')

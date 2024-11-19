@@ -52,9 +52,9 @@ export class ApplicationsService {
         return ApplicationMapper.toApplicationDto(savedApplication);
 
     }
-    async update(id: string, updateApplicationDto: UpdateApplicationDto, userId: string, isAdmin: Boolean) {
+    async update(id: string, updateApplicationDto: UpdateApplicationDto, userId: string, isAdmin: boolean) {
         const application = await this.applicationRepository.findById(id);
-        if (!application || !((application.userId !== userId) || isAdmin)) throw new NotFoundException('no such application');
+        if (!application || (!(application.userId !== userId) && !isAdmin)) throw new NotFoundException('no such application');
         application.companyName = updateApplicationDto.companyName;
         application.position = updateApplicationDto.position;
         const updateApplication = await this.applicationRepository.update(id, application);
