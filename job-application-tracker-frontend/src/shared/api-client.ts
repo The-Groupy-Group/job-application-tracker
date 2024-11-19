@@ -30,4 +30,29 @@ axiosInstance.interceptors.response.use(
   }
 );
 
+axiosInstance.interceptors.response.use((response) => {
+  if (response.data) {
+    convertDates(response.data);
+  }
+  return response;
+});
+
+function convertDates(obj: any) {
+  if (obj === null || obj === undefined || typeof obj !== "object") return;
+
+  for (const key of Object.keys(obj)) {
+    const value = obj[key];
+    if (typeof value === "string" && isIsoDateString(value)) {
+      obj[key] = new Date(value);
+    } else if (typeof value === "object") {
+      convertDates(value);
+    }
+  }
+}
+
+function isIsoDateString(value: string): boolean {
+  const isoDateRegex = /^\d{4}-\d{2}-\d{2}T\d{2}:\d{2}:\d{2}.\d{3}Z$/;
+  return isoDateRegex.test(value);
+}
+
 export default axiosInstance;

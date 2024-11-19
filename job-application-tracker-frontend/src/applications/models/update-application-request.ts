@@ -1,5 +1,5 @@
 export interface UpdateApplicationRequest {
-  _id: string;
+  id: string;
   companyName: string;
   position: string;
 }

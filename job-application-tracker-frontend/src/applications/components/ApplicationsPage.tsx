@@ -26,7 +26,7 @@ export const ApplicationsPage = () => {
 
   const handleApplicationDeleted = (id: string) => {
     applicationsService.deleteApplication(id).then(() => {
-      setApplications(applications.filter((app) => app._id !== id));
+      setApplications(applications.filter((app) => app.id !== id));
     });
   };
 

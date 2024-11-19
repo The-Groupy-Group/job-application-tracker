@@ -25,7 +25,7 @@ export const ApplicationsList = ({
     >
       {applications.map((app) => (
         <ApplicationListItem
-          key={app._id}
+          key={app.id}
           application={app}
           onDelete={onApplicationDeleted}
         />

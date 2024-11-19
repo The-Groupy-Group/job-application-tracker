@@ -1,7 +1,7 @@
 import ApplicationState from "./application-state";
 
 export interface Application {
-  _id: string;
+  id: string;
   companyName: string;
   position: string;
   currentState: ApplicationState;
