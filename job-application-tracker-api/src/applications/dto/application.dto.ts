@@ -1,5 +1,5 @@
 import { ApiProperty } from '@nestjs/swagger';
-import { ApplicationState } from "../applications-states/model/application-state.model";
+import { ApplicationStateDto } from '../applications-states/dto/application-state.dto';
 
 
 export class ApplicationDto {
@@ -13,7 +13,7 @@ export class ApplicationDto {
     position: string;
 
     @ApiProperty()
-    currentState: ApplicationState;
+    currentState: ApplicationStateDto;
 
     @ApiProperty()
     userId: string;
