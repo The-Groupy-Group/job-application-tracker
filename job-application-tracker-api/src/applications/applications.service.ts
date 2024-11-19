@@ -6,6 +6,7 @@ import { CreateApplicationDto } from './dto/create-application.dto';
 import { UpdateApplicationDto } from './dto/update-application.dto';
 import { Application } from './models/application.model';
 import { ApplicationStateDto } from './applications-states/dto/application-state.dto';
+import { application } from 'express';
 
 @Injectable()
 export class ApplicationsService {
@@ -20,7 +21,7 @@ export class ApplicationsService {
         catch {
             throw new NotFoundException('no such user');
         }
-        return this.applicationRepository.findAllByUserId(userId);
+        return (await this.applicationRepository.findAllByUserId(userId)).map(ApplicationMapper.toApplicationDto);
     }
 
     async findOne(applicationId: string) {
