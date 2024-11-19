@@ -7,7 +7,7 @@ import { ApiRequest } from 'src/shared/api-request';
 import { Role } from 'src/shared/role';
 import { CreateApplicationDto } from './dto/create-application.dto';
 import { UpdateApplicationDto } from './dto/update-application.dto';
-import { CreateStateDto } from './applications-states/dto/create-state.dto';
+import { ApplicationStateDto } from './applications-states/dto/application-state.dto';
 
 @ApiTags('api/applications')
 @UseGuards(AuthGuard)
@@ -52,12 +52,12 @@ export class ApplicationsController {
     @Post(':applicationId/states')
     @ApiOperation({ summary: 'add new state ' })
     @ApiCreatedResponse({
-        description: 'applicationDto',
-        type: ApplicationDto
+        description: 'create state dto',
+        type: ApplicationStateDto   
     })
     async createState(@Request() request: ApiRequest,
         @Param('applicationId') applicationId: string,
-        @Body() newState: CreateStateDto
+        @Body() newState: ApplicationStateDto
     ) {
         return await this.applicationService.createState(applicationId, newState, request.jwtPayLoad.sub);
     }
@@ -72,10 +72,7 @@ export class ApplicationsController {
         @Param('id') id: string,
         @Body(ValidationPipe) updateApplicationDto: UpdateApplicationDto
     ) {
-        let isAdmin: Boolean = false;
-        if (request.jwtPayLoad.roles.includes(Role.admin)) {
-            isAdmin = true;
-        }
+        let isAdmin: boolean = request.jwtPayLoad.roles.includes(Role.admin);
         return await this.applicationService.update(id, updateApplicationDto, request.jwtPayLoad.sub, isAdmin);
     }
 

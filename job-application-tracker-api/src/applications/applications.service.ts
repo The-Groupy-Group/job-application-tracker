@@ -4,8 +4,8 @@ import { UsersService } from 'src/users/users.service';
 import { ApplicationMapper } from './application-mapper';
 import { CreateApplicationDto } from './dto/create-application.dto';
 import { UpdateApplicationDto } from './dto/update-application.dto';
-import { ApplicationState } from './applications-states/model/application-state.model';
 import { Application } from './models/application.model';
+import { ApplicationStateDto } from './applications-states/dto/application-state.dto';
 
 @Injectable()
 export class ApplicationsService {
@@ -67,7 +67,7 @@ export class ApplicationsService {
         return ApplicationMapper.toApplicationDto(deletedApplication);
     }
 
-    async createState(appId: string, newState: ApplicationState, userId: string) {
+    async createState(appId: string, newState: ApplicationStateDto, userId: string) {
         const application: Application = await this.applicationRepository.findById(appId);
         if (!application || application.userId !== userId) {
             throw new NotFoundException('no such application');
